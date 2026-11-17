@@ -28,7 +28,10 @@ input,select{width:100%;padding:12px;border:1px solid #c8d2df;border-radius:10px
 .progress{height:8px;background:#dde4ee;border-radius:8px;overflow:hidden;margin-bottom:14px}
 .progress div{height:100%;background:#2f80ed;width:0;transition:width .3s}
 .section-name{font-size:13px;color:#5a6b7d;margin-bottom:8px}
-.question{font-size:22px;line-height:2;margin-bottom:16px}
+.question{font-size:22px;line-height:2;margin-bottom:16px;white-space:pre-line}
+.question.ltr{font-size:18px;line-height:1.7;text-align:left;font-family:Georgia,serif}
+.option.ltr{text-align:left;font-size:17px;font-family:Georgia,serif}
+#welcomeSections{white-space:pre-line}
 .option{display:block;width:100%;text-align:right;padding:14px;margin-bottom:10px;border:2px solid #c8d2df;border-radius:10px;background:#fff;font-size:19px;cursor:pointer;color:#1c2b3a;font-family:inherit}
 .option.selected{border-color:#0b2e59;background:#e3ecf8;font-weight:bold}
 .nav{display:flex;gap:10px}
@@ -108,11 +111,11 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
     <div id="licenseChip"></div>
     <div class="icon">📝</div>
     <h2>مرحبًا بك في اختبار كفاءة المعلمين</h2>
-    <p class="lead">هذا الاختبار جزء من إجراءات التوظيف في المدرسة، ويهدف إلى التعرّف على مستوى إتقانك للمادة التي ستدرّسها وفق المنهاج الأردني، وعلى مهاراتك في التدريس داخل الصف.</p>
+    <p class="lead">هذا الاختبار جزء من إجراءات التوظيف في المدرسة، ويهدف إلى التعرّف على مستوى إتقانك للمادة التي ستدرّسها وفق المنهاج الأردني. اختر مادتك في الخطوة التالية، وستظهر لك أقسام الاختبار الخاصة بها.</p>
     <div class="features">
       <div class="feature"><div class="fi">⏱️</div><b id="wTime">-</b><span>مدة الاختبار</span></div>
-      <div class="feature"><div class="fi">❓</div><b id="wCount">-</b><span>اختيار من متعدد</span></div>
-      <div class="feature"><div class="fi">📚</div><b id="wSections">-</b><span>في مادة التخصص</span></div>
+      <div class="feature"><div class="fi">❓</div><b id="wCount">-</b><span>لكل سؤال (اختيار من متعدد)</span></div>
+      <div class="feature"><div class="fi">📚</div><b id="wSections">-</b><span>العربية والإنجليزية</span></div>
       <div class="feature"><div class="fi">🔒</div><b>نتيجة سرّية</b><span>تصل إلى الإدارة فقط</span></div>
     </div>
     <div class="rules">
@@ -162,7 +165,10 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
     <label>رقم الهاتف</label>
     <input id="phone" type="tel" placeholder="07XXXXXXXX">
     <label>المادة</label>
-    <select id="subject"><option>اللغة العربية</option></select>
+    <select id="subject" onchange="updateTestInfo()">
+      <option>اللغة العربية</option>
+      <option>اللغة الإنجليزية</option>
+    </select>
     <label>المؤهل العلمي</label>
     <select id="degree">
       <option value="">اختر المؤهل</option>
@@ -259,7 +265,7 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
 <script>
 const DEFAULT_PASS = "1234";          // كلمة السر قبل التفعيل (تغيّرها المدرسة عند التفعيل)
 const TEST_MINUTES = 60;
-const TRIAL_TESTS = 3;                // عدد الاختبارات المجانية قبل التفعيل
+const TRIAL_DAYS = 7;                 // مدة الفترة التجريبية بالأيام (أسبوع)
 const SELLER_WA = "962779221235";     // واتساب Dahshan Soft لطلبات التفعيل
 const LICENSE_SECRET = "DS-TeacherTest-2026-Wael";  // يجب أن يطابق مولّد الرموز
 
@@ -309,14 +315,18 @@ function licenseState(){
     const until = expDate(parseKey(lic.key).exp);
     return { status: (!until || until >= new Date()) ? 'active' : 'expired', school: lic.school, until };
   }
-  const used = +(lsGet('ttTrialUsed') || 0);
-  return { status: 'trial', left: Math.max(0, TRIAL_TESTS - used) };
+  let start = +(lsGet('ttTrialStart') || 0);
+  if(!start){ start = Date.now(); lsSet('ttTrialStart', String(start)); }
+  const passed = Math.floor((Date.now() - start) / 86400000);
+  return { status: 'trial', left: Math.max(0, TRIAL_DAYS - passed) };
 }
 function fmtDate(d){ return d ? d.toLocaleDateString('ar-JO') : "مدى الحياة"; }
 function licenseText(st){
   if(st.status === 'active') return `✅ نسخة مفعّلة — ${st.school}` + (st.until ? ` (حتى ${fmtDate(st.until)})` : " (مدى الحياة)");
   if(st.status === 'expired') return `⛔ انتهى ترخيص ${st.school} بتاريخ ${fmtDate(st.until)} — يرجى التجديد`;
-  return `🧪 نسخة تجريبية — متبقٍّ ${st.left} من ${TRIAL_TESTS} اختبارات مجانية`;
+  if(st.left <= 0) return `⛔ انتهت الفترة التجريبية (${TRIAL_DAYS} أيام) — يرجى تفعيل التطبيق`;
+  const d = st.left === 1 ? "يوم واحد" : st.left === 2 ? "يومان" : st.left + " أيام";
+  return `🧪 نسخة تجريبية مجانية لمدة أسبوع — متبقٍّ ${d}`;
 }
 function canTest(){
   const st = licenseState();
@@ -342,7 +352,7 @@ function backHome(){ renderWelcome(); show('welcomeScreen'); }
 
 function goToForm(){
   if(!canTest()){
-    alert("انتهت النسخة التجريبية أو انتهى الترخيص.\nيرجى من إدارة المدرسة تفعيل التطبيق.");
+    alert("انتهت الفترة التجريبية أو انتهى الترخيص.\nيرجى من إدارة المدرسة تفعيل التطبيق.");
     openActivation();
     return;
   }
@@ -404,10 +414,21 @@ function changePass(){
   msg.textContent = "تم حفظ كلمة السر الجديدة ✔";
 }
 
-const sections = { nahw: "النحو والصرف", imla: "الإملاء", balagha: "البلاغة", adab: "الأدب والنصوص", skills: "المهارات التدريسية" };
+const sections = {
+  nahw: "النحو والصرف", imla: "الإملاء", balagha: "البلاغة", adab: "الأدب والنصوص", skills: "المهارات التدريسية",
+  grammar: "Grammar — القواعد", vocab: "Vocabulary — المفردات", reading: "Reading — الاستيعاب القرائي",
+  errors: "Error Correction — تصحيح الأخطاء", pron: "Pronunciation & Stress — النطق والنبر", writing: "Writing & Linking — الكتابة وأدوات الربط"
+};
+
+// أقسام كل مادة
+const SUBJECTS = {
+  "اللغة العربية": ["nahw","imla","balagha","adab","skills"],
+  "اللغة الإنجليزية": ["grammar","vocab","reading","errors","pron","writing"]
+};
+const EN_KEYS = SUBJECTS["اللغة الإنجليزية"];
 
 // عدد الأسئلة التي تظهر للمتقدم من كل قسم (تُختار عشوائيًا من بنك القسم)
-const PER_SECTION = { nahw: 40, imla: 40, balagha: 40, adab: 40, skills: 10 };
+const PER_SECTION = { nahw: 40, imla: 40, balagha: 40, adab: 40, skills: 10, grammar: 20, vocab: 20, reading: 20, errors: 20, pron: 20, writing: 20 };
 
 // خمسة نماذج ثابتة مختلفة جزئيًا — كل نموذج يأخذ 40 سؤالًا من بنك كل قسم بإزاحة مختلفة
 const FORMS = ["أ","ب","ج","د","هـ"];
@@ -743,35 +764,237 @@ const questions = [
   {s:"adab", q:"ما البحر الذي تفعيلاته: «فاعلن فاعلن فاعلن فاعلن»؟", o:["المتقارب", "الرجز", "المتدارك"], a:2},
   {s:"adab", q:"ما حرف الروي؟", o:["الحرف الذي تُبنى عليه القصيدة وتُنسب إليه", "أول حرف في البيت", "الحرف الذي قبل القافية"], a:0},
   {s:"adab", q:"ما التصريع؟", o:["تكرار البيت في القصيدة", "اتفاق نهاية الشطر الأول مع نهاية الشطر الثاني في الوزن والروي", "تقسيم القصيدة إلى مقاطع"], a:1},
-  {s:"adab", q:"كم عدد بحور الشعر العربي بعد زيادة الأخفش؟", o:["خمسة عشر بحرًا", "أربعة عشر بحرًا", "ستة عشر بحرًا"], a:2}
+  {s:"adab", q:"كم عدد بحور الشعر العربي بعد زيادة الأخفش؟", o:["خمسة عشر بحرًا", "أربعة عشر بحرًا", "ستة عشر بحرًا"], a:2},
+  // ================= اللغة الإنجليزية =================
+  {s:"grammar", q:"By the time we arrived, the film ___.", o:["had already started","has already started","already starts"], a:0},
+  {s:"grammar", q:"If I ___ you, I would accept the offer.", o:["am","were","have been"], a:1},
+  {s:"grammar", q:"She suggested that he ___ a doctor.", o:["sees","saw","see"], a:2},
+  {s:"grammar", q:"Neither the teacher nor the students ___ aware of the change.", o:["were","was","is"], a:0},
+  {s:"grammar", q:"I'm looking forward to ___ you.", o:["see","seeing","have seen"], a:1},
+  {s:"grammar", q:"The letter ___ before the manager arrived.", o:["was writing","has been written","had been written"], a:2},
+  {s:"grammar", q:"He asked me where ___.", o:["I lived","did I live","do I live"], a:0},
+  {s:"grammar", q:"Hardly ___ the room when the phone rang.", o:["he had entered","had he entered","he entered"], a:1},
+  {s:"grammar", q:"This is the school ___ my father studied.", o:["which","who","where"], a:2},
+  {s:"grammar", q:"You ___ have told me earlier; now it's too late.", o:["should","must","can"], a:0},
+  {s:"grammar", q:"She has been teaching here ___ 2015.", o:["for","since","from"], a:1},
+  {s:"grammar", q:"The more you practise, ___ you become.", o:["more fluent","most fluent","the more fluent"], a:2},
+  {s:"grammar", q:"I wish I ___ harder for the exam last year.", o:["had studied","studied","have studied"], a:0},
+  {s:"grammar", q:"My car needs ___.", o:["to repair","repairing","repair"], a:1},
+  {s:"grammar", q:"He is used to ___ up early.", o:["get","got","getting"], a:2},
+  {s:"grammar", q:"Which sentence is in the passive voice?", o:["The report will be finished tomorrow.","They will finish the report tomorrow.","The report is finishing tomorrow."], a:0},
+  {s:"grammar", q:"There is ___ milk left in the fridge, so we need to buy some.", o:["a few","little","few"], a:1},
+  {s:"grammar", q:"Choose the correct reported speech: She said, \"I am tired.\"", o:["She said she is tired yesterday.","She said that she is being tired.","She said that she was tired."], a:2},
+  {s:"grammar", q:"It's high time we ___ home.", o:["went","go","will go"], a:0},
+  {s:"grammar", q:"Not only ___ the exam, but she also got the highest mark.", o:["she passed","did she pass","she did pass"], a:1},
+  {s:"grammar", q:"The workers ___ the bridge by next June.", o:["will build","are building","will have built"], a:2},
+  {s:"grammar", q:"Each of the students ___ a laptop.", o:["has","have","are having"], a:0},
+  {s:"grammar", q:"I'd rather you ___ smoke here.", o:["don't","didn't","not"], a:1},
+  {s:"grammar", q:"She is ___ honest woman.", o:["a","the","an"], a:2},
+  {s:"grammar", q:"Unless you ___, you will miss the bus.", o:["hurry","will hurry","don't hurry"], a:0},
+  {s:"grammar", q:"He denied ___ the window.", o:["to break","breaking","break"], a:1},
+  {s:"grammar", q:"Which word is an adverb in: \"She speaks English fluently\"?", o:["speaks","English","fluently"], a:2},
+  {s:"grammar", q:"The book, ___ cover is torn, belongs to Ali.", o:["whose","which","who's"], a:0},
+  {s:"grammar", q:"We have ___ homework today than yesterday.", o:["fewer","less","lesser"], a:1},
+  {s:"grammar", q:"Which sentence is correct?", o:["He doesn't know nothing.","He don't know anything.","He doesn't know anything."], a:2},
+
+  {s:"vocab", q:"Choose the synonym of \"reluctant\":", o:["unwilling","eager","careful"], a:0},
+  {s:"vocab", q:"Choose the antonym of \"generous\":", o:["kind","mean","wealthy"], a:1},
+  {s:"vocab", q:"\"To postpone\" means to:", o:["cancel","announce","delay"], a:2},
+  {s:"vocab", q:"She made a ___ to study harder next term.", o:["decision","work","homework"], a:0},
+  {s:"vocab", q:"Which collocation is correct?", o:["make homework","do homework","take homework"], a:1},
+  {s:"vocab", q:"The opposite of \"ancient\" is:", o:["old","historic","modern"], a:2},
+  {s:"vocab", q:"\"Look after\" means:", o:["take care of","search for","admire"], a:0},
+  {s:"vocab", q:"\"Give up\" means:", o:["return something","stop doing something","distribute"], a:1},
+  {s:"vocab", q:"Which word means \"happening every year\"?", o:["monthly","daily","annual"], a:2},
+  {s:"vocab", q:"A person who designs buildings is ___.", o:["an architect","a plumber","a surgeon"], a:0},
+  {s:"vocab", q:"The noun form of \"decide\" is:", o:["decisive","decision","decidedly"], a:1},
+  {s:"vocab", q:"The adjective form of \"danger\" is:", o:["endanger","dangerously","dangerous"], a:2},
+  {s:"vocab", q:"Which prefix makes \"possible\" negative?", o:["im-","un-","dis-"], a:0},
+  {s:"vocab", q:"Which word is spelled correctly?", o:["recieve","receive","receeve"], a:1},
+  {s:"vocab", q:"\"Fragile\" means:", o:["heavy","strong","easily broken"], a:2},
+  {s:"vocab", q:"Choose the word that does NOT belong to the group:", o:["banana","carrot","potato"], a:0},
+  {s:"vocab", q:"She has a lot of ___ in teaching; she has worked for 15 years.", o:["experiment","experience","expert"], a:1},
+  {s:"vocab", q:"The doctor wrote a ___ for the medicine.", o:["recipe","receipt","prescription"], a:2},
+  {s:"vocab", q:"\"Abundant\" is closest in meaning to:", o:["plentiful","rare","small"], a:0},
+  {s:"vocab", q:"\"Cautious\" is the opposite of:", o:["careful","reckless","quiet"], a:1},
+  {s:"vocab", q:"We need to ___ attention to the instructions.", o:["give","make","pay"], a:2},
+  {s:"vocab", q:"\"Run out of\" means:", o:["have no more of","escape from","exercise"], a:0},
+  {s:"vocab", q:"The children were ___ by the clown's tricks.", o:["amusing","amused","amuse"], a:1},
+  {s:"vocab", q:"Which word is a homophone of \"right\"?", o:["ride","light","write"], a:2},
+  {s:"vocab", q:"A synonym of \"enormous\" is:", o:["huge","tiny","average"], a:0},
+  {s:"vocab", q:"\"Accurate\" means:", o:["quick","correct and exact","modern"], a:1},
+  {s:"vocab", q:"The plural of \"phenomenon\" is:", o:["phenomenons","phenomenas","phenomena"], a:2},
+  {s:"vocab", q:"To \"put off\" a meeting means to:", o:["delay it","attend it","organise it"], a:0},
+  {s:"vocab", q:"Which word means \"to make something better\"?", o:["worsen","improve","reduce"], a:1},
+  {s:"vocab", q:"The teacher asked the students to ___ the new words in the dictionary.", o:["look after","look forward","look up"], a:2},
+
+  {s:"reading", q:"Read:\n\"Petra is a famous historical city in the south of Jordan. It was built by the Nabataeans more than 2,000 years ago. The city is carved into pink sandstone cliffs, which is why it is often called the Rose City. In 2007, Petra was chosen as one of the New Seven Wonders of the World.\"\n\nWho built Petra?", o:["The Nabataeans","The Romans","The Greeks"], a:0},
+  {s:"reading", q:"Read:\n\"Petra is a famous historical city in the south of Jordan. It was built by the Nabataeans more than 2,000 years ago. The city is carved into pink sandstone cliffs, which is why it is often called the Rose City. In 2007, Petra was chosen as one of the New Seven Wonders of the World.\"\n\nWhy is Petra called the Rose City?", o:["Because roses grow there","Because of its pink sandstone","Because a queen named Rose built it"], a:1},
+  {s:"reading", q:"Read:\n\"Petra is a famous historical city in the south of Jordan. It was built by the Nabataeans more than 2,000 years ago. The city is carved into pink sandstone cliffs, which is why it is often called the Rose City. In 2007, Petra was chosen as one of the New Seven Wonders of the World.\"\n\nThe word \"carved\" is closest in meaning to:", o:["painted","built with bricks","cut"], a:2},
+  {s:"reading", q:"Read:\n\"Petra is a famous historical city in the south of Jordan. It was built by the Nabataeans more than 2,000 years ago. The city is carved into pink sandstone cliffs, which is why it is often called the Rose City. In 2007, Petra was chosen as one of the New Seven Wonders of the World.\"\n\nWhen was Petra chosen as one of the New Seven Wonders?", o:["In 2007","More than 2,000 years ago","In 2017"], a:0},
+  {s:"reading", q:"Read:\n\"Petra is a famous historical city in the south of Jordan. It was built by the Nabataeans more than 2,000 years ago. The city is carved into pink sandstone cliffs, which is why it is often called the Rose City. In 2007, Petra was chosen as one of the New Seven Wonders of the World.\"\n\nWhat is the main idea of the text?", o:["Tourism in the south of Jordan","Petra is a famous ancient city in Jordan","How the Nabataeans lived"], a:1},
+  {s:"reading", q:"Read:\n\"Sleep is essential for students' success. Research shows that teenagers need between eight and ten hours of sleep each night. However, many students stay up late using their phones. Lack of sleep can affect memory, concentration and mood.\"\n\nHow many hours of sleep do teenagers need?", o:["Six to seven","Eight to ten","More than ten"], a:1},
+  {s:"reading", q:"Read:\n\"Sleep is essential for students' success. Research shows that teenagers need between eight and ten hours of sleep each night. However, many students stay up late using their phones. Lack of sleep can affect memory, concentration and mood.\"\n\nWhich is NOT mentioned as an effect of lack of sleep?", o:["memory","mood","weight"], a:2},
+  {s:"reading", q:"Read:\n\"Sleep is essential for students' success. Research shows that teenagers need between eight and ten hours of sleep each night. However, many students stay up late using their phones. Lack of sleep can affect memory, concentration and mood.\"\n\nWhy do many students not get enough sleep?", o:["They use their phones late at night","They study too much","They drink coffee"], a:0},
+  {s:"reading", q:"Read:\n\"Sleep is essential for students' success. Research shows that teenagers need between eight and ten hours of sleep each night. However, many students stay up late using their phones. Lack of sleep can affect memory, concentration and mood.\"\n\nThe word \"essential\" means:", o:["optional","very important","harmful"], a:1},
+  {s:"reading", q:"Read:\n\"Sleep is essential for students' success. Research shows that teenagers need between eight and ten hours of sleep each night. However, many students stay up late using their phones. Lack of sleep can affect memory, concentration and mood.\"\n\nThe word \"However\" in the text shows:", o:["a result","an example","a contrast"], a:2},
+  {s:"reading", q:"Read:\n\"The Dead Sea, located between Jordan and Palestine, is the lowest point on land, about 430 metres below sea level. Its water is almost ten times saltier than ocean water, so people can float easily on its surface. No fish or plants can live in it. Sadly, the sea is shrinking by more than one metre every year.\"\n\nWhy can people float easily in the Dead Sea?", o:["Because the water is very salty","Because it is shallow","Because the water is warm"], a:0},
+  {s:"reading", q:"Read:\n\"The Dead Sea, located between Jordan and Palestine, is the lowest point on land, about 430 metres below sea level. Its water is almost ten times saltier than ocean water, so people can float easily on its surface. No fish or plants can live in it. Sadly, the sea is shrinking by more than one metre every year.\"\n\nHow far below sea level is the Dead Sea?", o:["About 43 metres","About 430 metres","About 4,300 metres"], a:1},
+  {s:"reading", q:"Read:\n\"The Dead Sea, located between Jordan and Palestine, is the lowest point on land, about 430 metres below sea level. Its water is almost ten times saltier than ocean water, so people can float easily on its surface. No fish or plants can live in it. Sadly, the sea is shrinking by more than one metre every year.\"\n\nThe word \"shrinking\" means:", o:["growing","moving","becoming smaller"], a:2},
+  {s:"reading", q:"Read:\n\"The Dead Sea, located between Jordan and Palestine, is the lowest point on land, about 430 metres below sea level. Its water is almost ten times saltier than ocean water, so people can float easily on its surface. No fish or plants can live in it. Sadly, the sea is shrinking by more than one metre every year.\"\n\nWhat problem does the text mention?", o:["The sea is getting smaller every year","Pollution from factories","Too many tourists"], a:0},
+  {s:"reading", q:"Read:\n\"The Dead Sea, located between Jordan and Palestine, is the lowest point on land, about 430 metres below sea level. Its water is almost ten times saltier than ocean water, so people can float easily on its surface. No fish or plants can live in it. Sadly, the sea is shrinking by more than one metre every year.\"\n\nThe word \"Sadly\" shows the writer's:", o:["happiness","regret","surprise at the salt"], a:1},
+  {s:"reading", q:"Read:\n\"Many schools now use 'flipped learning'. In this method, students watch short video lessons at home and then use class time for discussion, practice and projects. Supporters say it gives teachers more time to help students individually. Critics, however, point out that not all students have internet access at home.\"\n\nWhere do students watch the lessons in flipped learning?", o:["In class","In the library","At home"], a:2},
+  {s:"reading", q:"Read:\n\"Many schools now use 'flipped learning'. In this method, students watch short video lessons at home and then use class time for discussion, practice and projects. Supporters say it gives teachers more time to help students individually. Critics, however, point out that not all students have internet access at home.\"\n\nWhat is class time used for?", o:["Discussion, practice and projects","Watching videos","Taking exams only"], a:0},
+  {s:"reading", q:"Read:\n\"Many schools now use 'flipped learning'. In this method, students watch short video lessons at home and then use class time for discussion, practice and projects. Supporters say it gives teachers more time to help students individually. Critics, however, point out that not all students have internet access at home.\"\n\nWhat is one criticism of flipped learning?", o:["Teachers don't like it","Some students have no internet at home","It is too expensive for schools"], a:1},
+  {s:"reading", q:"Read:\n\"Many schools now use 'flipped learning'. In this method, students watch short video lessons at home and then use class time for discussion, practice and projects. Supporters say it gives teachers more time to help students individually. Critics, however, point out that not all students have internet access at home.\"\n\n\"Critics\" are people who:", o:["make videos","agree with the method","find problems with the method"], a:2},
+  {s:"reading", q:"Read:\n\"Many schools now use 'flipped learning'. In this method, students watch short video lessons at home and then use class time for discussion, practice and projects. Supporters say it gives teachers more time to help students individually. Critics, however, point out that not all students have internet access at home.\"\n\nThe word \"individually\" means:", o:["one by one","in large groups","quickly"], a:0},
+  {s:"reading", q:"Read:\n\"Ahmad wanted to improve his English, so he decided to read one short story every week. At first, he found many unknown words and checked them in his dictionary. After three months, he noticed that he was reading faster and needed the dictionary less often. His teacher was impressed by the improvement in his writing too.\"\n\nHow often did Ahmad read a story?", o:["Every day","Once a week","Once a month"], a:1},
+  {s:"reading", q:"Read:\n\"Ahmad wanted to improve his English, so he decided to read one short story every week. At first, he found many unknown words and checked them in his dictionary. After three months, he noticed that he was reading faster and needed the dictionary less often. His teacher was impressed by the improvement in his writing too.\"\n\nWhat happened after three months?", o:["He stopped reading","He bought a new dictionary","He read faster and used the dictionary less"], a:2},
+  {s:"reading", q:"Read:\n\"Ahmad wanted to improve his English, so he decided to read one short story every week. At first, he found many unknown words and checked them in his dictionary. After three months, he noticed that he was reading faster and needed the dictionary less often. His teacher was impressed by the improvement in his writing too.\"\n\nWhat can we infer from the text?", o:["Regular reading helps language learning","Dictionaries are useless","Short stories are boring"], a:0},
+  {s:"reading", q:"Read:\n\"Ahmad wanted to improve his English, so he decided to read one short story every week. At first, he found many unknown words and checked them in his dictionary. After three months, he noticed that he was reading faster and needed the dictionary less often. His teacher was impressed by the improvement in his writing too.\"\n\nWhich skill also improved, according to his teacher?", o:["speaking","writing","listening"], a:1},
+  {s:"reading", q:"Read:\n\"Ahmad wanted to improve his English, so he decided to read one short story every week. At first, he found many unknown words and checked them in his dictionary. After three months, he noticed that he was reading faster and needed the dictionary less often. His teacher was impressed by the improvement in his writing too.\"\n\nThe word \"impressed\" means the teacher felt:", o:["angry","worried","admiration"], a:2},
+  {s:"reading", q:"Read:\n\"Recycling is one of the easiest ways to protect the environment. When we recycle paper, plastic and glass, we reduce the amount of waste that goes to landfills. It also saves energy and natural resources. For example, recycling one aluminium can saves enough energy to run a television for three hours.\"\n\nWhich materials are mentioned in the text?", o:["paper, plastic and glass","wood, metal and cloth","food and water"], a:0},
+  {s:"reading", q:"Read:\n\"Recycling is one of the easiest ways to protect the environment. When we recycle paper, plastic and glass, we reduce the amount of waste that goes to landfills. It also saves energy and natural resources. For example, recycling one aluminium can saves enough energy to run a television for three hours.\"\n\nWhat does recycling reduce?", o:["Energy prices","Waste that goes to landfills","The number of factories"], a:1},
+  {s:"reading", q:"Read:\n\"Recycling is one of the easiest ways to protect the environment. When we recycle paper, plastic and glass, we reduce the amount of waste that goes to landfills. It also saves energy and natural resources. For example, recycling one aluminium can saves enough energy to run a television for three hours.\"\n\nThe word \"resources\" means:", o:["problems","rubbish","supplies of materials"], a:2},
+  {s:"reading", q:"Read:\n\"Recycling is one of the easiest ways to protect the environment. When we recycle paper, plastic and glass, we reduce the amount of waste that goes to landfills. It also saves energy and natural resources. For example, recycling one aluminium can saves enough energy to run a television for three hours.\"\n\nThe writer's main purpose is to:", o:["encourage people to recycle","sell televisions","explain how cans are made"], a:0},
+  {s:"reading", q:"Read:\n\"Recycling is one of the easiest ways to protect the environment. When we recycle paper, plastic and glass, we reduce the amount of waste that goes to landfills. It also saves energy and natural resources. For example, recycling one aluminium can saves enough energy to run a television for three hours.\"\n\nRecycling one aluminium can saves energy to run a TV for:", o:["one hour","three hours","three days"], a:1},
+
+  {s:"errors", q:"Find the error and its correction:\n\"He go to school every day.\"", o:["go → goes","to → at","every → each"], a:0},
+  {s:"errors", q:"Find the error and its correction:\n\"I have seen him yesterday.\"", o:["seen → see","have seen → saw","yesterday → tomorrow"], a:1},
+  {s:"errors", q:"Find the error and its correction:\n\"She is more taller than her sister.\"", o:["is → was","than → then","more taller → taller"], a:2},
+  {s:"errors", q:"Find the error and its correction:\n\"The informations you gave me were useful.\"", o:["informations were → information was","useful → usefull","gave → given"], a:0},
+  {s:"errors", q:"Find the error and its correction:\n\"He has lived here since five years.\"", o:["lived → living","since → for","here → there"], a:1},
+  {s:"errors", q:"Find the error and its correction:\n\"If it will rain tomorrow, we will stay at home.\"", o:["stay → staying","at → in","will rain → rains"], a:2},
+  {s:"errors", q:"Find the error and its correction:\n\"Everyone have finished the test.\"", o:["have → has","finished → finish","the → a"], a:0},
+  {s:"errors", q:"Find the error and its correction:\n\"She explained me the lesson.\"", o:["explained → explains","explained me → explained to me","the → a"], a:1},
+  {s:"errors", q:"Find the error and its correction:\n\"I am agree with you.\"", o:["with → to","you → your","am agree → agree"], a:2},
+  {s:"errors", q:"Find the error and its correction:\n\"The students was listening carefully.\"", o:["was → were","listening → listen","carefully → careful"], a:0},
+  {s:"errors", q:"Find the error and its correction:\n\"She doesn't likes tea.\"", o:["doesn't → don't","likes → like","tea → teas"], a:1},
+  {s:"errors", q:"Find the error and its correction:\n\"This is the most good book I have ever read.\"", o:["have → has","ever → never","most good → best"], a:2},
+  {s:"errors", q:"Find the error and its correction:\n\"My brother he works in Aqaba.\"", o:["delete \"he\"","works → work","in → at"], a:0},
+  {s:"errors", q:"Find the error and its correction:\n\"I look forward to hear from you.\"", o:["look → looking","hear → hearing","from → of"], a:1},
+  {s:"errors", q:"Find the error and its correction:\n\"There are much students in the class.\"", o:["are → is","class → classes","much → many"], a:2},
+  {s:"errors", q:"Find the error and its correction:\n\"He suggested to go to the park.\"", o:["to go → going","park → parks","suggested → suggest"], a:0},
+  {s:"errors", q:"Find the error and its correction:\n\"The news are very surprising.\"", o:["very → so","are → is","surprising → surprised"], a:1},
+  {s:"errors", q:"Find the error and its correction:\n\"I didn't went to the party.\"", o:["didn't → don't","party → parties","went → go"], a:2},
+  {s:"errors", q:"Find the error and its correction:\n\"She is married with a doctor.\"", o:["with → to","is → was","a → an"], a:0},
+  {s:"errors", q:"Find the error and its correction:\n\"We discussed about the problem.\"", o:["discussed → discuss","delete \"about\"","problem → problems"], a:1},
+  {s:"errors", q:"Find the error and its correction:\n\"Although he was tired, but he continued working.\"", o:["working → work","was → is","delete \"but\""], a:2},
+  {s:"errors", q:"Find the error and its correction:\n\"The car who I bought is red.\"", o:["who → which","bought → buy","is → was"], a:0},
+  {s:"errors", q:"Find the error and its correction:\n\"She can speaks three languages.\"", o:["can → could","speaks → speak","languages → language"], a:1},
+  {s:"errors", q:"Find the error and its correction:\n\"I have been waiting here since two hours.\"", o:["been → being","here → there","since → for"], a:2},
+  {s:"errors", q:"Find the error and its correction:\n\"Ali and me went to the market.\"", o:["me → I","went → go","the → a"], a:0},
+  {s:"errors", q:"Find the error and its correction:\n\"He drives very carefull.\"", o:["drives → drive","carefull → carefully","very → much"], a:1},
+  {s:"errors", q:"Find the error and its correction:\n\"The teacher made us to rewrite the essay.\"", o:["made → make","essay → essays","to rewrite → rewrite"], a:2},
+  {s:"errors", q:"Find the error and its correction:\n\"One of my friend lives in Irbid.\"", o:["friend → friends","lives → live","in → at"], a:0},
+  {s:"errors", q:"Find the error and its correction:\n\"It was a such good film.\"", o:["was → is","a such → such a","film → films"], a:1},
+  {s:"errors", q:"Find the error and its correction:\n\"When I arrived, the lesson already started.\"", o:["arrived → arrive","When → While","already started → had already started"], a:2},
+
+  {s:"pron", q:"Where is the stress in \"photography\"?", o:["pho-TO-gra-phy","PHO-to-gra-phy","pho-to-GRA-phy"], a:0},
+  {s:"pron", q:"Where is the stress in \"photograph\"?", o:["pho-TO-graph","PHO-to-graph","pho-to-GRAPH"], a:1},
+  {s:"pron", q:"Which word has the stress on the second syllable?", o:["table","happy","begin"], a:2},
+  {s:"pron", q:"Which word has a different vowel sound?", o:["good","food","moon"], a:0},
+  {s:"pron", q:"Which word has a silent letter?", o:["bread","knife","clean"], a:1},
+  {s:"pron", q:"The \"-ed\" in \"wanted\" is pronounced:", o:["/t/","/d/","/ɪd/"], a:2},
+  {s:"pron", q:"The \"-ed\" in \"watched\" is pronounced:", o:["/t/","/d/","/ɪd/"], a:0},
+  {s:"pron", q:"The \"-ed\" in \"played\" is pronounced:", o:["/t/","/d/","/ɪd/"], a:1},
+  {s:"pron", q:"Which word has the same vowel sound as \"seat\"?", o:["sit","set","meet"], a:2},
+  {s:"pron", q:"Which word rhymes with \"through\"?", o:["blue","though","tough"], a:0},
+  {s:"pron", q:"The \"-s\" in \"dogs\" is pronounced:", o:["/s/","/z/","/ɪz/"], a:1},
+  {s:"pron", q:"The \"-es\" in \"watches\" is pronounced:", o:["/s/","/z/","/ɪz/"], a:2},
+  {s:"pron", q:"Which word has a silent \"b\"?", o:["climb","bubble","rabbit"], a:0},
+  {s:"pron", q:"Where is the stress in the noun \"record\" (a written record)?", o:["re-CORD","REC-ord","Both syllables equally"], a:1},
+  {s:"pron", q:"Where is the stress in the verb \"present\" (to present a project)?", o:["PRES-ent","Both syllables equally","pre-SENT"], a:2},
+  {s:"pron", q:"Which word has the stress on the third syllable?", o:["understand","important","beautiful"], a:0},
+  {s:"pron", q:"Which word has a different \"th\" sound?", o:["think","this","thank"], a:1},
+  {s:"pron", q:"Which word contains the sound /ʃ/?", o:["chair","jam","sugar"], a:2},
+  {s:"pron", q:"In which word is \"gh\" silent?", o:["night","ghost","laugh"], a:0},
+  {s:"pron", q:"The \"ch\" in \"chemistry\" is pronounced:", o:["/tʃ/","/k/","/ʃ/"], a:1},
+  {s:"pron", q:"Which word has the same vowel sound as \"cut\"?", o:["put","cart","love"], a:2},
+  {s:"pron", q:"Where is the stress in \"education\"?", o:["ed-u-CA-tion","ED-u-ca-tion","ed-U-ca-tion"], a:0},
+  {s:"pron", q:"Which word has a silent \"w\"?", o:["window","write","swim"], a:1},
+  {s:"pron", q:"Which pair of words are homophones (same sound, different meaning)?", o:["live – leave","meet – met","sea – see"], a:2},
+  {s:"pron", q:"Which word has two syllables?", o:["teacher","school","beautiful"], a:0},
+  {s:"pron", q:"Which word has three syllables?", o:["garden","computer","book"], a:1},
+  {s:"pron", q:"Which words are usually stressed in an English sentence?", o:["articles like \"the\"","prepositions like \"of\"","main verbs and nouns"], a:2},
+  {s:"pron", q:"Which word contains the sound /dʒ/?", o:["judge","gift","yes"], a:0},
+  {s:"pron", q:"Which word has a different vowel sound?", o:["head","bead","bread"], a:1},
+  {s:"pron", q:"Where is the stress in \"necessary\"?", o:["ne-CES-sa-ry","NE-ces-sa-ry","ne-ces-SA-ry"], a:1},
+
+  {s:"writing", q:"He was ill; ___, he went to work.", o:["however","therefore","because"], a:0},
+  {s:"writing", q:"She studied hard; ___, she passed the exam.", o:["however","as a result","although"], a:1},
+  {s:"writing", q:"___ it was raining, they played football.", o:["Because","Despite","Although"], a:2},
+  {s:"writing", q:"___ the bad weather, the trip was successful.", o:["Despite","Although","Because"], a:0},
+  {s:"writing", q:"I stayed at home ___ I was tired.", o:["although","because","unless"], a:1},
+  {s:"writing", q:"Which linking expression introduces an example?", o:["however","therefore","for instance"], a:2},
+  {s:"writing", q:"Which linking word shows addition?", o:["moreover","although","otherwise"], a:0},
+  {s:"writing", q:"Which sentence is punctuated correctly?", o:["Ahmad who lives in Zarqa, is a doctor.","Ahmad, who lives in Zarqa, is a doctor.","Ahmad who, lives in Zarqa is a doctor."], a:1},
+  {s:"writing", q:"The sentence that states the main idea of a paragraph is called the:", o:["concluding sentence","supporting sentence","topic sentence"], a:2},
+  {s:"writing", q:"Which expression is best to start a conclusion?", o:["In conclusion","Firstly","For example"], a:0},
+  {s:"writing", q:"Which group of words is best for describing the steps of a process?", o:["however, therefore, moreover","first, then, finally","although, despite, but"], a:1},
+  {s:"writing", q:"Which is a complete sentence?", o:["Because I was late.","Running to the bus.","I missed the bus because I was late."], a:2},
+  {s:"writing", q:"Combine correctly: \"I was tired. I finished my homework.\"", o:["Although I was tired, I finished my homework.","Because I was tired, I finished my homework.","I was tired so that I finished my homework."], a:0},
+  {s:"writing", q:"Which sentence uses the apostrophe correctly?", o:["The students's books are new.","The students' books are new.","The student's' books are new."], a:1},
+  {s:"writing", q:"Which sentence uses capital letters correctly?", o:["we visited amman in june.","We visited amman in June.","We visited Amman in June."], a:2},
+  {s:"writing", q:"___ you study hard, you will not pass.", o:["Unless","If","When"], a:0},
+  {s:"writing", q:"Which linking word shows a result?", o:["whereas","consequently","despite"], a:1},
+  {s:"writing", q:"Which linking word shows a contrast between two facts?", o:["in addition","for example","whereas"], a:2},
+  {s:"writing", q:"In a formal letter that begins \"Dear Sir/Madam\", which closing is correct?", o:["Yours faithfully","Lots of love","See you soon"], a:0},
+  {s:"writing", q:"Which of these is correctly punctuated (NOT a run-on sentence)?", o:["I love reading, I read every day.","I love reading. I read every day.","I love reading I read every day."], a:1},
+  {s:"writing", q:"Choose the best connector: \"She is clever ___ hard-working.\"", o:["but","or","as well as"], a:2},
+  {s:"writing", q:"Which is the best topic sentence for a paragraph about the benefits of exercise?", o:["Exercise has many benefits for both body and mind.","I went to the gym yesterday.","Some people do not like sport."], a:0},
+  {s:"writing", q:"He saved money ___ he could buy a new laptop.", o:["because","so that","although"], a:1},
+  {s:"writing", q:"Which punctuation mark is used to introduce a list?", o:["semicolon (;)","question mark (?)","colon (:)"], a:2},
+  {s:"writing", q:"Choose the correct order:\n(1) Then, add the sugar.\n(2) First, boil the water.\n(3) Finally, stir and serve.", o:["2 – 1 – 3","1 – 2 – 3","3 – 1 – 2"], a:0},
+  {s:"writing", q:"Which sentence is written in a formal style?", o:["Gonna send it tomorrow.","I would be grateful if you could send me the details.","Send me the stuff, OK?"], a:1},
+  {s:"writing", q:"___, I would like to thank my teachers. (the beginning of a speech)", o:["In contrast","As a result","First of all"], a:2},
+  {s:"writing", q:"Which word has the same meaning as \"in addition\"?", o:["furthermore","nevertheless","instead"], a:0},
+  {s:"writing", q:"He is rich; ___, he is not happy.", o:["therefore","nevertheless","so"], a:1},
+  {s:"writing", q:"Which sentence uses \"its\" correctly?", o:["Its raining today.","The dog wagged it's tail.","The school changed its timetable."], a:2}
 ];
 
 let current = 0, answers = [], order = [], candidate = {}, timeLeft = 0, timerId = null, finished = false;
 
-// ===== إعدادات الأقسام (يحددها المدير) =====
-function loadSettings(){
+// ===== إعدادات الأقسام (يحددها المدير لكل مادة) =====
+function subjectOf(k){ return Object.keys(SUBJECTS).find(sub => SUBJECTS[sub].includes(k)); }
+function currentSubject(){
+  const el = document.getElementById('subject');
+  return (el && SUBJECTS[el.value]) ? el.value : Object.keys(SUBJECTS)[0];
+}
+function loadAllSettings(){
   try {
     const st = JSON.parse(localStorage.getItem('teacherSettings'));
-    if(st && Array.isArray(st.sections)){
-      const list = Object.keys(sections).filter(k => st.sections.includes(k));
-      if(list.length) return list;
-    }
+    if(st && Array.isArray(st.sections)) return st.sections;
   } catch(e){}
-  return Object.keys(sections);
+  return null;
+}
+function loadSettings(subject){
+  subject = subject || currentSubject();
+  const keys = SUBJECTS[subject];
+  const saved = loadAllSettings();
+  if(saved){
+    const list = keys.filter(k => saved.includes(k));
+    if(list.length) return list;
+  }
+  return keys.slice();
 }
 function saveSettings(list){
   try { localStorage.setItem('teacherSettings', JSON.stringify({ sections: list })); } catch(e){}
 }
 function countQuestions(list){ return list.reduce((n, k) => n + PER_SECTION[k], 0); }
 function testMinutes(list){
-  const all = countQuestions(Object.keys(sections));
+  if(!list.length) return 0;
+  const all = countQuestions(SUBJECTS[subjectOf(list[0])]);
   return Math.max(10, Math.round(TEST_MINUTES * countQuestions(list) / all));
+}
+function sectionNames(list){
+  const sub = subjectOf(list[0]);
+  return list.length === SUBJECTS[sub].length ? "جميع الأقسام" : list.map(k => sections[k]).join('، ');
 }
 
 let selectedSections = null;
 function renderSettings(){
-  if(!selectedSections) selectedSections = loadSettings();
-  const keys = Object.keys(sections);
+  if(!selectedSections) selectedSections = [].concat(...Object.keys(SUBJECTS).map(sub => loadSettings(sub)));
   const box = document.getElementById('sectionChecks');
   box.innerHTML = "";
   const addCheck = (label, checked, cls, onChange) => {
@@ -784,40 +1007,48 @@ function renderSettings(){
     l.appendChild(document.createTextNode(label));
     box.appendChild(l);
   };
-  addCheck('كل الأقسام', selectedSections.length === keys.length, 'all', ch => {
-    selectedSections = ch ? keys.slice() : [];
-    applySettings();
-  });
-  keys.forEach(k => {
-    addCheck(`${sections[k]} (${PER_SECTION[k]} سؤالًا)`, selectedSections.includes(k), '', ch => {
-      selectedSections = ch ? keys.filter(x => selectedSections.includes(x) || x === k) : selectedSections.filter(x => x !== k);
+  const lines = [], missing = [];
+  Object.keys(SUBJECTS).forEach(sub => {
+    const keys = SUBJECTS[sub];
+    const h = document.createElement('div'); h.className = 'wsec'; h.style.margin = '14px 0 8px';
+    h.textContent = "مادة " + sub;
+    box.appendChild(h);
+    const chosen = keys.filter(k => selectedSections.includes(k));
+    addCheck('كل أقسام ' + sub, chosen.length === keys.length, 'all', ch => {
+      selectedSections = selectedSections.filter(x => !keys.includes(x)).concat(ch ? keys : []);
       applySettings();
     });
+    keys.forEach(k => {
+      addCheck(`${sections[k]} (${PER_SECTION[k]} سؤالًا)`, selectedSections.includes(k), '', ch => {
+        selectedSections = ch ? selectedSections.concat([k]) : selectedSections.filter(x => x !== k);
+        applySettings();
+      });
+    });
+    if(chosen.length) lines.push(`${sub}: ${countQuestions(chosen)} سؤالًا — ${testMinutes(chosen)} دقيقة`);
+    else missing.push(sub);
   });
-  const sum = document.getElementById('settingsSummary');
-  const msg = document.getElementById('settingsMsg');
-  if(selectedSections.length === 0){
-    sum.textContent = "";
-    msg.textContent = "اختر قسمًا واحدًا على الأقل";
-  } else {
-    msg.textContent = "";
-    sum.textContent = `الاختبار الحالي: ${countQuestions(selectedSections)} سؤالًا — المدة ${testMinutes(selectedSections)} دقيقة`;
-  }
+  document.getElementById('settingsSummary').textContent = lines.join('  |  ');
+  document.getElementById('settingsMsg').textContent = missing.length ? "اختر قسمًا واحدًا على الأقل في مادة: " + missing.join('، ') + " (وإلا تُفحص كل أقسامها)" : "";
 }
 function applySettings(){
-  if(selectedSections.length) saveSettings(selectedSections);
+  saveSettings(selectedSections);
   renderSettings();
   updateTestInfo();
 }
 function updateTestInfo(){
   const list = loadSettings();
-  const names = list.length === Object.keys(sections).length ? "جميع الأقسام" : list.map(k => sections[k]).join('، ');
-  const txt = `يشمل الاختبار: ${names} — ${countQuestions(list)} سؤالًا خلال ${testMinutes(list)} دقيقة`;
-  ['testInfo','welcomeSections'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = txt; });
-  const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
-  set('wTime', testMinutes(list) + " دقيقة");
-  set('wCount', countQuestions(list) + " سؤالًا");
-  set('wSections', list.length === 1 ? "قسم واحد" : list.length === 2 ? "قسمان" : list.length + " أقسام");
+  const el = document.getElementById('testInfo');
+  if(el) el.textContent = `يشمل الاختبار: ${sectionNames(list)} — ${countQuestions(list)} سؤالًا خلال ${testMinutes(list)} دقيقة`;
+  const w = document.getElementById('welcomeSections');
+  if(w) w.textContent = Object.keys(SUBJECTS).map(sub => {
+    const l = loadSettings(sub);
+    return `${sub}: ${countQuestions(l)} سؤالًا خلال ${testMinutes(l)} دقيقة`;
+  }).join('\n');
+  const set = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
+  set('wTime', "حتى " + Math.max(...Object.keys(SUBJECTS).map(sub => testMinutes(loadSettings(sub)))) + " دقيقة");
+  set('wCount', "3 خيارات");
+  const n = Object.keys(SUBJECTS).length;
+  set('wSections', n === 1 ? "مادة واحدة" : n === 2 ? "مادتان" : n + " مواد");
 }
 
 function show(id){
@@ -886,14 +1117,19 @@ function renderQ(){
   document.getElementById('counter').textContent = `سؤال ${current + 1} من ${order.length}`;
   document.getElementById('bar').style.width = ((current + 1) / order.length * 100) + '%';
   document.getElementById('sectionName').textContent = "القسم: " + sections[q.s];
-  document.getElementById('qText').textContent = q.q;
+  const en = EN_KEYS.includes(q.s);
+  const qt = document.getElementById('qText');
+  qt.textContent = q.q;
+  qt.dir = en ? 'ltr' : 'rtl';
+  qt.classList.toggle('ltr', en);
   document.getElementById('testErr').textContent = "";
 
   const box = document.getElementById('options');
   box.innerHTML = "";
   item.opts.forEach(oi => {
     const b = document.createElement('button');
-    b.className = 'option' + (answers[current] === oi ? ' selected' : '');
+    b.className = 'option' + (en ? ' ltr' : '') + (answers[current] === oi ? ' selected' : '');
+    b.dir = en ? 'ltr' : 'rtl';
     b.textContent = q.o[oi];
     b.onclick = () => { answers[current] = oi; renderQ(); };
     box.appendChild(b);
@@ -966,7 +1202,6 @@ function finishTest(){
   results.push({ ...candidate, scores, percent, correct, totalQ: order.length,
     unanswered: answers.filter(a => a === null).length, timeUsed, wrong });
   try { localStorage.setItem('teacherResults', JSON.stringify(results)); } catch(e){}
-  if(licenseState().status === 'trial') lsSet('ttTrialUsed', String(+(lsGet('ttTrialUsed') || 0) + 1));
   show('endScreen');
 }
 
@@ -1033,7 +1268,15 @@ function analyze(r){
   else if(r.percent >= 70){ level = "جيد"; rec = "أوصي بتعيينه مع المتابعة"; cls = "mid"; }
   else if(r.percent >= 50){ level = "ضعيف"; rec = "لا أوصي بتعيينه إلا بعد تدريب"; cls = "bad"; }
   else { level = "غير مناسب"; rec = "لا أوصي بتعيينه"; cls = "bad"; }
-  return { rows, weak, danger, strong, rec, cls, level };
+  // المرحلة المناسبة لمعلم اللغة الإنجليزية
+  let stage = "";
+  if(r.subject === "اللغة الإنجليزية"){
+    if(r.percent >= 85) stage = "يصلح لجميع المراحل حتى الثانوية (التوجيهي)";
+    else if(r.percent >= 70) stage = "يصلح للمرحلة الأساسية العليا (من السابع إلى العاشر)";
+    else if(r.percent >= 55) stage = "يصلح للمرحلة الأساسية الدنيا فقط (من الأول إلى السادس)";
+    else stage = "لا يصلح لأي مرحلة حاليًا";
+  }
+  return { rows, weak, danger, strong, rec, cls, level, stage };
 }
 
 function apologyText(r, a){
@@ -1053,6 +1296,7 @@ function reportText(r, a){
   if(r.totalQ) t += `الإجابات الصحيحة: ${r.correct} من ${r.totalQ}\n`;
   if(r.timeUsed !== undefined) t += `الوقت المستغرق: ${fmtTime(r.timeUsed)} من ${r.minutes} دقيقة\n`;
   t += `*النتيجة النهائية: ${r.percent}% (${a.level})*\n`;
+  if(a.stage) t += `*المرحلة المناسبة: ${a.stage}*\n`;
   a.rows.forEach(x => t += `- ${x.name}: ${x.correct} من ${x.total} (${x.p}%)\n`);
   if(a.strong.length) t += `\nنقاط القوة: ${a.strong.join('، ')}`;
   if(a.weak.length) t += `\nنقاط الضعف: ${a.weak.join('، ')}`;
@@ -1090,6 +1334,7 @@ function openReport(idx){
   if(r.totalQ) addLine(info, "أسئلة لم يُجب عنها", String(r.unanswered || 0));
   if(r.timeUsed !== undefined) addLine(info, "الوقت المستغرق", fmtTime(r.timeUsed) + " من " + r.minutes + " دقيقة");
   addLine(info, "النتيجة النهائية", r.percent + "% (" + a.level + ")");
+  if(a.stage) addLine(info, "المرحلة المناسبة", a.stage);
   body.appendChild(info);
 
   const table = document.createElement('table');
@@ -1126,6 +1371,7 @@ function openReport(idx){
       items.forEach((w, n) => {
         const row = document.createElement('div'); row.className = 'wq';
         const qd = document.createElement('div'); qd.textContent = (n + 1) + ". " + w.q;
+        qd.style.whiteSpace = 'pre-line'; qd.dir = 'auto';
         const yd = document.createElement('div'); yd.className = 'yours';
         yd.textContent = "إجابته: " + (w.your === null ? "لم يُجب" : w.your);
         const rd = document.createElement('div'); rd.className = 'right';
