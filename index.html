@@ -539,7 +539,7 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
 <script>
 const DEFAULT_PASS = "1234";          // كلمة السر قبل التفعيل (تغيّرها المدرسة عند التفعيل)
 const TEST_MINUTES = 60;
-const TRIAL_DAYS = 7;                 // مدة الفترة التجريبية بالأيام (أسبوع)
+const TRIAL_DAYS = 14;                // مدة الفترة التجريبية بالأيام (أسبوعان)
 const SELLER_WA = "962779221235";     // واتساب Dahshan Soft لطلبات التفعيل
 const LICENSE_SECRET = "DS-TeacherTest-2026-Wael";  // يجب أن يطابق مولّد الرموز
 
@@ -626,9 +626,9 @@ function fmtDate(d){ return d ? d.toLocaleDateString('ar-JO') : "مدى الحي
 function licenseText(st){
   if(st.status === 'active') return `✅ نسخة مفعّلة — ${st.school}` + (st.until ? ` (حتى ${fmtDate(st.until)})` : " (مدى الحياة)");
   if(st.status === 'expired') return `⛔ انتهى ترخيص ${st.school} بتاريخ ${fmtDate(st.until)} — يرجى التجديد`;
-  if(st.left <= 0) return `⛔ انتهت الفترة التجريبية (${TRIAL_DAYS} أيام) — يرجى تفعيل التطبيق`;
-  const d = st.left === 1 ? "يوم واحد" : st.left === 2 ? "يومان" : st.left + " أيام";
-  return `🧪 نسخة تجريبية مجانية لمدة أسبوع — متبقٍّ ${d}`;
+  if(st.left <= 0) return `⛔ انتهت الفترة التجريبية (${TRIAL_DAYS} يومًا) — يرجى تفعيل التطبيق`;
+  const d = st.left === 1 ? "يوم واحد" : st.left === 2 ? "يومان" : st.left <= 10 ? st.left + " أيام" : st.left + " يومًا";
+  return `🧪 نسخة تجريبية مجانية لمدة أسبوعين — متبقٍّ ${d}`;
 }
 function canTest(){
   const st = licenseState();
