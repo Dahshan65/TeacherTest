@@ -212,25 +212,10 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
       <div class="feature"><div class="fi">📚</div><b id="wSections">-</b><span>العربية والإنجليزية</span></div>
       <div class="feature"><div class="fi">🔒</div><b>نتيجة سرّية</b><span>تصل إلى الإدارة فقط</span></div>
     </div>
-    <div class="rules">
-      <h3>تعليمات مهمة قبل البدء</h3>
-      <ul>
-        <li>اقرأ كل سؤال بعناية، واختر إجابة واحدة من ثلاثة خيارات.</li>
-        <li>يبدأ العدّاد عند الضغط على «ابدأ الاختبار»، ويُسلَّم الاختبار تلقائيًا عند انتهاء الوقت.</li>
-        <li>يمكنك الرجوع إلى الأسئلة السابقة وتعديل إجاباتك قبل الإنهاء.</li>
-        <li>يبدأ الاختبار برمز يُدخله مشرف المدرسة، ويعمل بملء الشاشة.</li>
-        <li>في نهاية الاختبار سؤال كتابي قصير (فقرة من 80 إلى 120 كلمة) مدته 10 دقائق.</li>
-        <li>الخروج من شاشة الاختبار أو فتح تطبيق آخر يُسجَّل تلقائيًا ويظهر في تقرير الإدارة.</li>
-        <li>لا تُحدِّث الصفحة ولا تغلقها أثناء الاختبار؛ وإن انقطع الاختبار يكمله المشرف من حيث توقف.</li>
-        <li>لن تظهر لك النتيجة، وستتواصل معك إدارة المدرسة بعد دراستها.</li>
-      </ul>
-    </div>
-    <div class="test-info" id="welcomeSections"></div>
+        <div class="test-info" id="welcomeSections"></div>
     <div id="resumeBox" class="resume-box hidden">
       <b>⚠️ يوجد اختبار لم يكتمل</b>
       <p id="resumeText"></p>
-      <label>رمز المشرف</label>
-      <input id="resumePass" type="password" placeholder="يُدخله مشرف المدرسة">
       <div class="err" id="resumeErr"></div>
       <button class="btn primary" onclick="resumeTest()">متابعة الاختبار من حيث توقف</button>
       <button class="btn light" onclick="submitInterrupted()">إنهاء الاختبار وحفظ نتيجته كما هي</button>
@@ -271,8 +256,9 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
   <div id="homeScreen" class="card hidden">
     <div id="modeBadge" class="mode-badge full"></div>
     <h2>بيانات المتقدم</h2>
-    <label>الاسم الرباعي</label>
-    <input id="name" type="text" placeholder="اكتب اسمك الرباعي">
+    <label>الاسم <span style="color:#c0392b">*</span></label>
+    <input id="name" type="text" placeholder="اكتب اسمك">
+    <p class="note" style="margin-top:4px">الاسم فقط مطلوب، وباقي البيانات اختيارية.</p>
     <div class="row2">
       <div>
         <label>الرقم الوطني / رقم الإقامة</label>
@@ -338,9 +324,6 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
       <option>أكثر من 10 سنوات</option>
     </select>
     <div class="test-info" id="testInfo"></div>
-    <label class="consent"><input type="checkbox" id="consent"><span>أُقرّ بأن البيانات صحيحة، وبأنني سأجيب عن الاختبار بنفسي دون أي مساعدة، وبأن نتيجة الاختبار سرّية تعود لإدارة المدرسة وحدها.</span></label>
-    <label>رمز المشرف (يُدخله موظف المدرسة)</label>
-    <input id="supPass" type="password" placeholder="رمز بدء الاختبار" autocomplete="off">
     <div class="err" id="homeErr"></div>
     <button class="btn primary" onclick="startTest()">ابدأ الاختبار</button>
     <button class="small-link" onclick="backHome()">رجوع</button>
@@ -460,7 +443,6 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
         <label>علامة النجاح (الحد الأدنى للتوصية بالتعيين)</label>
         <input id="setPass" type="number" min="50" max="85" step="1" dir="ltr">
         <p class="note">بين 50 و85 — الافتراضي 65. من يحصل على أقل منها: «لا يُوصى به».</p>
-        <label class="check"><input type="checkbox" id="setEssay"> إضافة سؤال كتابي في نهاية الاختبار (10 دقائق) يصححه مشرف المادة</label>
         <button class="btn primary" onclick="saveSchoolSettings()">حفظ بيانات المدرسة</button>
         <div class="err" id="schoolMsg"></div>
       </div>
@@ -488,13 +470,8 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
 
       <div class="set-group">
         <h3>🔐 الرموز والمستخدمون</h3>
-        <label>رمز المشرف لبدء الاختبار</label>
-        <p class="note">يعطيه المدير للموظف الذي يجلس مع المتقدم. إن تركته فارغًا يُستخدم رمز الإدارة.</p>
-        <input id="chgSup" type="password" placeholder="رمز المشرف (4 أحرف على الأقل)">
-        <button class="btn light" onclick="changeSup()">حفظ رمز المشرف</button>
-        <div class="err" id="supMsg"></div>
         <label>دخول مشرف اللغة العربية</label>
-        <p class="note">كلمة سر خاصة بمشرف المادة: يرى تقارير مادته فقط، ويصحح السؤال الكتابي، ولا يرى الإعدادات.</p>
+        <p class="note">كلمة سر خاصة بمشرف المادة: يرى تقارير مادته فقط، ولا يرى الإعدادات.</p>
         <input id="supAr" type="password" placeholder="كلمة سر مشرف العربية (اتركها فارغة للإلغاء)">
         <label>دخول مشرف اللغة الإنجليزية</label>
         <input id="supEn" type="password" placeholder="كلمة سر مشرف الإنجليزية (اتركها فارغة للإلغاء)">
@@ -1761,18 +1738,14 @@ function startTest(){
   const degree = val('degree'), experience = val('experience'), stageApplied = val('stageApplied');
   const err = document.getElementById('homeErr');
 
-  if(!name || !phone || !nid || !degree || !experience || !stageApplied){ err.textContent = "يرجى تعبئة الاسم والرقم الوطني والهاتف والمرحلة والمؤهل والخبرة"; return; }
-  if(name.split(/\s+/).length < 3){ err.textContent = "يرجى كتابة الاسم الثلاثي أو الرباعي"; return; }
-  if(!/^[0-9A-Z]{6,15}$/.test(nid)){ err.textContent = "الرقم الوطني / رقم الإقامة غير صحيح"; return; }
-  if(!/^07\d{8}$/.test(phone)){ err.textContent = "رقم الهاتف غير صحيح (مثال: 0791234567)"; return; }
-  if(!document.getElementById('consent').checked){ err.textContent = "يرجى الموافقة على الإقرار قبل البدء"; return; }
+  if(!name){ err.textContent = "يرجى كتابة الاسم"; return; }
+  if(nid && !/^[0-9A-Z]{6,15}$/.test(nid)){ err.textContent = "الرقم الوطني / رقم الإقامة غير صحيح (أو اتركه فارغًا)"; return; }
+  if(phone && !/^07\d{8}$/.test(phone)){ err.textContent = "رقم الهاتف غير صحيح (مثال: 0791234567) أو اتركه فارغًا"; return; }
   if(!canTest()){ err.textContent = "التطبيق غير مفعّل — يرجى مراجعة إدارة المدرسة"; return; }
-  const sp = document.getElementById('supPass');
-  if(!supOk(sp.value)){ err.textContent = "رمز المشرف غير صحيح — يُدخله موظف المدرسة"; return; }
   const subject = document.getElementById('subject').value;
 
   // منع إعادة الاختبار خلال 6 أشهر إلا بموافقة المشرف
-  const prev = loadResults().filter(r => r.subject === subject && ((r.nid && r.nid === nid) || r.phone === phone))
+  const prev = loadResults().filter(r => r.subject === subject && ((nid && r.nid === nid) || (phone && r.phone === phone)))
     .sort((a, b) => (b.ts || 0) - (a.ts || 0))[0];
   let retestOf = "";
   if(prev){
@@ -1780,7 +1753,6 @@ function startTest(){
     if(recent && !confirm(`تنبيه للمشرف: هذا المتقدم اختُبر سابقًا في ${subject} بتاريخ ${prev.date} وحصل على ${prev.percent}%.\nهل تريد السماح له بإعادة الاختبار؟`)) return;
     retestOf = `${prev.date} (${prev.percent}%)`;
   }
-  sp.value = "";
   err.textContent = "";
 
   candidate = {
@@ -1924,9 +1896,6 @@ function renderResumeBox(){
   box.classList.remove('hidden');
 }
 function loadInterrupted(){
-  const pw = document.getElementById('resumePass');
-  if(!supOk(pw.value)){ document.getElementById('resumeErr').textContent = "رمز المشرف غير صحيح"; return null; }
-  pw.value = "";
   const p = lsJSON('ttInProgress');
   if(!p) return null;
   candidate = p.candidate; order = p.order; answers = p.answers;
@@ -2311,7 +2280,7 @@ function timesAr(n){ return n === 1 ? "مرة واحدة" : n === 2 ? "مرتي�
 function behaviorSummary(r){
   const parts = [];
   parts.push(r.leaves ? `خرج من شاشة الاختبار ${timesAr(r.leaves)}` : "لم يخرج من شاشة الاختبار");
-  if(r.resumes) parts.push(`انقطع الاختبار واستُكمل ${timesAr(r.resumes)} برمز المشرف`);
+  if(r.resumes) parts.push(`انقطع الاختبار واستُكمل ${timesAr(r.resumes)}`);
   if(r.closedEarly) parts.push("أُنهي الاختبار قبل اكتماله بقرار المشرف");
   return parts.join("، ");
 }
@@ -2494,7 +2463,7 @@ function openReport(idx){
   } else {
     fb.appendChild(el('span', '', "النتيجة النهائية"));
     fb.appendChild(el('b', '', r.percent + "%"));
-    fb.appendChild(el('span', '', `تُحسب عند إضافة علامة الكتابة أو المقابلة: الاختبار ${WEIGHTS.test}% + الكتابة ${WEIGHTS.essay}% + المقابلة ${WEIGHTS.interview}%`));
+    fb.appendChild(el('span', '', `تُحسب عند إضافة علامة المقابلة: الاختبار ${WEIGHTS.test}% + المقابلة ${WEIGHTS.interview}%`));
   }
   body.appendChild(fb);
 
@@ -2550,6 +2519,7 @@ function shareReport(){
 
 function sendApology(){
   if(!currentReport) return;
+  if(!currentReport.r.phone){ alert("لم يكتب المتقدم رقم هاتفه، فلا يمكن إرسال الرسالة له عبر واتساب"); return; }
   const phone = '962' + currentReport.r.phone.slice(1);
   window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(apologyText(currentReport.r, currentReport.a)), '_blank');
 }
@@ -2569,7 +2539,7 @@ function printReport(){
 // =====================================================================
 const ESSAY_MINUTES = 10;                 // مدة السؤال الكتابي
 const RETEST_DAYS = 180;                  // لا يُعاد الاختبار قبل 6 أشهر إلا بموافقة المشرف
-const WEIGHTS = { test: 70, essay: 10, interview: 20 };   // أوزان النتيجة النهائية
+const WEIGHTS = { test: 80, essay: 10, interview: 20 };   // essay للتقارير القديمة فقط   // أوزان النتيجة النهائية
 const STAGES = { 1: "المرحلة الأساسية الدنيا", 2: "المرحلة الأساسية العليا", 3: "المرحلة الثانوية" };
 const INTERVIEW = [
   ["personality", "الشخصية والحضور"],
@@ -2656,7 +2626,7 @@ function schoolName(){
   return st.status === 'active' ? st.school : (schoolInfo().name || "");
 }
 function passMark(){ const v = +schoolInfo().passMark; return v >= 50 && v <= 85 ? v : 65; }
-function essayOn(){ return schoolInfo().essay !== false; }
+function essayOn(){ return false; }   // تم إلغاء السؤال الكتابي
 function supCodes(){ return schoolInfo().supCodes || {}; }
 function isAdmin(){ return !!role && role.type === 'admin'; }
 
@@ -2669,7 +2639,6 @@ function renderSchoolSettings(){
   sn.title = st.status === 'active' ? "اسم المدرسة مأخوذ من الترخيص" : "";
   document.getElementById('setPrincipal').value = s.principal || "";
   document.getElementById('setPass').value = passMark();
-  document.getElementById('setEssay').checked = essayOn();
   const img = document.getElementById('logoPreview');
   if(s.logo){ img.src = s.logo; img.classList.remove('hidden'); document.getElementById('logoRemove').style.display = ''; }
   else { img.classList.add('hidden'); document.getElementById('logoRemove').style.display = 'none'; }
@@ -2685,8 +2654,7 @@ function saveSchoolSettings(){
   if(!(pm >= 50 && pm <= 85)){ msg.classList.remove('ok'); msg.textContent = "علامة النجاح يجب أن تكون بين 50 و85"; return; }
   const patch = {
     principal: document.getElementById('setPrincipal').value.trim(),
-    passMark: Math.round(pm),
-    essay: document.getElementById('setEssay').checked
+    passMark: Math.round(pm)
   };
   if(licenseState().status !== 'active') patch.name = document.getElementById('setSchool').value.trim();
   saveSchoolInfo(patch);
@@ -2846,13 +2814,13 @@ function exportExcel(){
   const secKeys = Object.keys(sections).filter(k => list.some(x => x.r.scores && x.r.scores[k]));
   const cols = ["الرقم المرجعي","الاسم","الرقم الوطني","الهاتف","المادة","المرحلة المتقدَّم لها","المؤهل","التقدير الجامعي","الجامعة","سنة التخرج","الخبرة","تاريخ الاختبار","النموذج"]
     .concat(secKeys.map(k => sections[k] + " %"))
-    .concat(["نتيجة الاختبار %","المرحلة المناسبة","المستوى CEFR","الكتابة /10","المقابلة /25","النتيجة النهائية %","التقدير","التوصية","مرات الخروج من الاختبار","إعادة اختبار"]);
+    .concat(["نتيجة الاختبار %","المرحلة المناسبة","المستوى CEFR","المقابلة /25","النتيجة النهائية %","التقدير","التوصية","مرات الخروج من الاختبار","إعادة اختبار"]);
   const esc = v => { v = v === undefined || v === null ? "" : String(v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
   const lines = [cols.map(esc).join(',')];
   list.forEach(({ r, a }) => {
     const row = [r.id, r.name, r.nid, r.phone ? "'" + r.phone : "", r.subject, STAGES[r.stageApplied] || "", r.degree, r.gpa, r.university, r.gradYear, r.experience, r.date, r.form]
       .concat(secKeys.map(k => { const x = a.rows.find(y => y.key === k); return x ? x.p : ""; }))
-      .concat([r.percent, a.stage, a.cefr, typeof r.essayScore === 'number' ? r.essayScore : "", a.iv !== null ? a.iv : "",
+      .concat([r.percent, a.stage, a.cefr, a.iv !== null ? a.iv : "",
                a.final !== null ? a.final : "", a.level, a.rec, r.leaves !== undefined ? r.leaves : "", r.retestOf || ""]);
     lines.push(row.map(esc).join(','));
   });
@@ -2883,7 +2851,6 @@ function openCompare(){
     ["الخبرة", x => x.r.experience],
     ...secKeys.map(k => [sections[k], x => { const s = x.a.rows.find(y => y.key === k); return s ? s.p : null; }, "%"]),
     ["نتيجة الاختبار", x => x.r.percent, "%"],
-    ["السؤال الكتابي /10", x => typeof x.r.essayScore === 'number' ? x.r.essayScore : null, ""],
     ["المقابلة /25", x => x.a.iv, ""],
     ["النتيجة النهائية", x => x.a.final, "%"],
     ["المرحلة المناسبة", x => x.a.stage],
@@ -3057,6 +3024,40 @@ function installApp(){
 }
 
 renderWelcome();
+</script>
+<script>
+/* ===== تشغيل داخل تطبيق الأندرويد (APK) ===== */
+if(window.AndroidApp){
+  window.open = u => { AndroidApp.openUrl(String(u)); return null; };
+  window.print = () => AndroidApp.printPage();
+  enterFullscreen = () => AndroidApp.immersive(true);
+  exitFullscreen = () => AndroidApp.immersive(false);
+  // تنزيل الملفات (Excel، النسخة الاحتياطية) إلى مجلد التنزيلات
+  const origClick = HTMLAnchorElement.prototype.click;
+  HTMLAnchorElement.prototype.click = function(){
+    if(this.download && /^(blob|data):/.test(this.href)){
+      const name = this.download;
+      fetch(this.href).then(r => r.blob()).then(b => {
+        const fr = new FileReader();
+        fr.onload = () => AndroidApp.saveFile(name, String(fr.result).split(',')[1] || "", b.type || "");
+        fr.readAsDataURL(b);
+      }).catch(() => alert("تعذّر حفظ الملف"));
+      return;
+    }
+    return origClick.call(this);
+  };
+  window.appLeft = () => recordLeave("خرج من التطبيق");
+  window.appBack = () => {
+    const vis = id => { const e = document.getElementById(id); return e && !e.classList.contains('hidden'); };
+    if(guardActive && !finished){ AndroidApp.toast("لا يمكن الخروج أثناء الاختبار"); return 'stay'; }
+    if(vis('welcomeScreen')) return 'exit';
+    if(vis('reportScreen') || vis('compareScreen')){ backToAdmin(); return 'stay'; }
+    if(vis('adminScreen')){ logout(); return 'stay'; }
+    if(vis('endScreen')){ location.reload(); return 'stay'; }
+    backHome(); return 'stay';
+  };
+  const ib = document.getElementById('installBtn'); if(ib) ib.style.setProperty('display', 'none', 'important');
+}
 </script>
 </body>
 </html>
