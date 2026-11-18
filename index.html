@@ -7,6 +7,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon.png">
 <meta name="theme-color" content="#0b2e59">
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -66,7 +67,80 @@ footer .wa{display:inline-block;margin-top:8px;background:#25d366;color:#fff;pad
 .warn-box{background:#fdecea;color:#c0392b;border-radius:10px;padding:10px;margin-top:10px;font-weight:bold}
 .apology{background:#f4f6f9;border-radius:10px;padding:12px;line-height:2;margin-top:12px;white-space:pre-line;font-size:17px}
 .view-btn{background:#0b2e59;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-family:inherit;font-size:15px;cursor:pointer}
-@media print{header,footer,.btn,.small-link{display:none !important}body{background:#fff}.card{box-shadow:none}}
+body.wide main{max-width:900px}
+textarea{width:100%;padding:12px;border:1px solid #c8d2df;border-radius:10px;font-size:17px;font-family:inherit;line-height:1.9;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.consent{display:flex;gap:10px;align-items:flex-start;background:#f4f7fb;border:1px solid #dde4ee;border-radius:10px;padding:10px 12px;margin-top:14px;font-size:15px;font-weight:normal;line-height:1.8;cursor:pointer}
+.consent input{width:22px;height:22px;flex:none;margin-top:4px;accent-color:#0b2e59}
+.install-btn{background:#1e7e34;color:#fff}
+/* لوحة الإدارة */
+.admin-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.admin-head h2{margin:0}
+.role-chip{background:#e3ecf8;color:#0b2e59;border-radius:20px;padding:4px 12px;font-size:14px;font-weight:bold}
+.tabs{display:flex;gap:6px;margin:14px 0;border-bottom:2px solid #dde4ee}
+.tab{flex:1;background:none;border:none;padding:10px 6px;font-size:17px;font-family:inherit;font-weight:bold;color:#5a6b7d;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab.active{color:#0b2e59;border-bottom-color:#0b2e59}
+.filters{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.filters select{font-size:15px;padding:9px}
+@media(max-width:640px){.filters{grid-template-columns:1fr 1fr}}
+.table-wrap{overflow-x:auto;margin-top:8px}
+.table-wrap table{min-width:640px}
+tr.r-good td:nth-child(6){color:#1e7e34;font-weight:bold}
+tr.r-mid td:nth-child(6){color:#b26a00;font-weight:bold}
+tr.r-bad td:nth-child(6){color:#c0392b;font-weight:bold}
+td input[type=checkbox]{width:20px;height:20px;accent-color:#0b2e59}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.set-group{border:1px solid #dde4ee;border-radius:12px;padding:6px 14px 14px;margin-top:16px}
+.set-group h3{color:#0b2e59;font-size:17px;margin-top:10px}
+.logo-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo-row img{width:70px;height:70px;object-fit:contain;border:1px solid #dde4ee;border-radius:10px;background:#fff}
+.logo-row .btn{width:auto;padding:8px 16px;font-size:15px;margin-top:0}
+.note{font-size:14px;color:#5a6b7d;line-height:1.8;margin-top:4px}
+/* الإحصاءات */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:640px){.stat-grid{grid-template-columns:1fr 1fr}}
+.stat{background:#f4f7fb;border:1px solid #e1e8f1;border-radius:12px;padding:12px 8px;text-align:center}
+.stat b{display:block;font-size:26px;color:#0b2e59}
+.stat span{font-size:14px;color:#5a6b7d}
+/* التقرير */
+.report-head{display:flex;align-items:center;gap:14px;border-bottom:3px double #0b2e59;padding-bottom:12px;margin-bottom:12px}
+.report-head img{width:72px;height:72px;object-fit:contain}
+.report-head .rh-text{flex:1;text-align:center}
+.report-head .rh-text b{display:block;font-size:20px;color:#0b2e59}
+.report-head .rh-text span{display:block;font-size:15px}
+.report-head .rh-ref{font-size:13px;text-align:left;direction:ltr;color:#5a6b7d;line-height:1.7}
+.score-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.score-strip div{background:#f4f7fb;border-radius:12px;padding:10px;text-align:center;border:1px solid #e1e8f1}
+.score-strip b{display:block;font-size:24px;color:#0b2e59}
+.score-strip span{font-size:13px;color:#5a6b7d}
+.bars{margin-top:8px}
+.bar-row{display:grid;grid-template-columns:150px 1fr 110px;align-items:center;gap:8px;margin:6px 0;font-size:15px}
+.bar-track{height:16px;background:#e6ebf2;border-radius:10px;overflow:hidden}
+.bar-fill{height:100%;border-radius:10px;background:#2f80ed;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.bar-fill.good{background:#27ae60}.bar-fill.mid{background:#f0a500}.bar-fill.bad{background:#c0392b}
+.bar-row small{color:#5a6b7d;font-size:12px;display:block}
+@media(max-width:560px){.bar-row{grid-template-columns:110px 1fr 84px;font-size:13px}}
+.sub-h{font-weight:bold;color:#0b2e59;font-size:18px;margin-top:18px;border-bottom:1px solid #dde4ee;padding-bottom:4px}
+.essay-text{background:#fbfbf7;border:1px solid #e6e2cf;border-radius:10px;padding:12px;line-height:2;white-space:pre-wrap;font-size:17px;margin-top:8px}
+.edit-box{background:#f4f7fb;border:1px dashed #9fb3cc;border-radius:12px;padding:10px 14px;margin-top:10px}
+.edit-box .btn{margin-top:10px;padding:10px;font-size:16px}
+.iv-grid{display:grid;grid-template-columns:1fr 110px;gap:6px 10px;align-items:center}
+.iv-grid select{padding:8px;font-size:15px}
+.final-box{background:linear-gradient(135deg,#0b2e59,#1b4f8f);color:#fff;border-radius:14px;padding:14px;text-align:center;margin-top:16px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.final-box b{font-size:30px;display:block}
+.final-box span{font-size:14px;opacity:.9}
+.signs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:28px;text-align:center;font-size:15px}
+.signs div{border-top:1px solid #1c2b3a;padding-top:6px;min-height:60px}
+.danger-btn{background:#fff;color:#c0392b;border:2px solid #c0392b}
+td.best{background:#e6f4ea;color:#1e7e34;font-weight:bold}
+@media print{
+  header,footer,.btn,.small-link,.no-print,#guardOverlay{display:none !important}
+  body{background:#fff}
+  main{max-width:100% !important;padding:0}
+  .card{box-shadow:none;padding:0}
+  details{display:none}
+  .report-head,.bars,.final-box,.signs{break-inside:avoid}
+}
 .check{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #c8d2df;border-radius:10px;margin-bottom:8px;font-size:18px;font-weight:normal;cursor:pointer}
 .check input{width:22px;height:22px;flex:none;accent-color:#0b2e59}
 .check.all{background:#e3ecf8;font-weight:bold}
@@ -139,6 +213,7 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
         <li>يبدأ العدّاد عند الضغط على «ابدأ الاختبار»، ويُسلَّم الاختبار تلقائيًا عند انتهاء الوقت.</li>
         <li>يمكنك الرجوع إلى الأسئلة السابقة وتعديل إجاباتك قبل الإنهاء.</li>
         <li>يبدأ الاختبار برمز يُدخله مشرف المدرسة، ويعمل بملء الشاشة.</li>
+        <li>في نهاية الاختبار سؤال كتابي قصير (فقرة من 80 إلى 120 كلمة) مدته 10 دقائق.</li>
         <li>الخروج من شاشة الاختبار أو فتح تطبيق آخر يُسجَّل تلقائيًا ويظهر في تقرير الإدارة.</li>
         <li>لا تُحدِّث الصفحة ولا تغلقها أثناء الاختبار؛ وإن انقطع الاختبار يكمله المشرف من حيث توقف.</li>
         <li>لن تظهر لك النتيجة، وستتواصل معك إدارة المدرسة بعد دراستها.</li>
@@ -156,6 +231,7 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
     </div>
     <button class="btn primary" onclick="goToForm()">متابعة إلى تعبئة البيانات</button>
     <button class="btn light" id="actBtn" onclick="openActivation()">🔑 تفعيل التطبيق للمدارس</button>
+    <button class="btn install-btn hidden" id="installBtn" onclick="installApp()">📲 تثبيت التطبيق على الجهاز</button>
     <button class="small-link" onclick="show('loginScreen')">دخول الإدارة</button>
     <a class="promo" href="https://dahshansoft.com" target="_blank">
       <span class="ds-logo">DS</span>
@@ -187,22 +263,61 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
     <h2>بيانات المتقدم</h2>
     <label>الاسم الرباعي</label>
     <input id="name" type="text" placeholder="اكتب اسمك الرباعي">
-    <label>رقم الهاتف</label>
-    <input id="phone" type="tel" placeholder="07XXXXXXXX">
+    <div class="row2">
+      <div>
+        <label>الرقم الوطني / رقم الإقامة</label>
+        <input id="nid" type="text" inputmode="numeric" dir="ltr" placeholder="9XXXXXXXXX">
+      </div>
+      <div>
+        <label>رقم الهاتف</label>
+        <input id="phone" type="tel" dir="ltr" placeholder="07XXXXXXXX">
+      </div>
+    </div>
     <label>المادة</label>
     <select id="subject" onchange="updateTestInfo()">
       <option>اللغة العربية</option>
       <option>اللغة الإنجليزية</option>
     </select>
-    <label>المؤهل العلمي</label>
-    <select id="degree">
-      <option value="">اختر المؤهل</option>
-      <option>دبلوم</option>
-      <option>بكالوريوس</option>
-      <option>دبلوم عالٍ</option>
-      <option>ماجستير</option>
-      <option>دكتوراه</option>
+    <label>المرحلة المتقدَّم لها</label>
+    <select id="stageApplied">
+      <option value="">اختر المرحلة</option>
+      <option value="1">المرحلة الأساسية الدنيا (1–6)</option>
+      <option value="2">المرحلة الأساسية العليا (7–10)</option>
+      <option value="3">المرحلة الثانوية (11–12)</option>
     </select>
+    <div class="row2">
+      <div>
+        <label>المؤهل العلمي</label>
+        <select id="degree">
+          <option value="">اختر المؤهل</option>
+          <option>دبلوم</option>
+          <option>بكالوريوس</option>
+          <option>دبلوم عالٍ</option>
+          <option>ماجستير</option>
+          <option>دكتوراه</option>
+        </select>
+      </div>
+      <div>
+        <label>التقدير</label>
+        <select id="gpa">
+          <option value="">اختر التقدير</option>
+          <option>مقبول</option>
+          <option>جيد</option>
+          <option>جيد جدًا</option>
+          <option>ممتاز</option>
+        </select>
+      </div>
+    </div>
+    <div class="row2">
+      <div>
+        <label>الجامعة</label>
+        <input id="university" type="text" placeholder="مثال: الجامعة الأردنية">
+      </div>
+      <div>
+        <label>سنة التخرج</label>
+        <select id="gradYear"><option value="">اختر السنة</option></select>
+      </div>
+    </div>
     <label>سنوات الخبرة</label>
     <select id="experience">
       <option value="">اختر سنوات الخبرة</option>
@@ -213,6 +328,7 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
       <option>أكثر من 10 سنوات</option>
     </select>
     <div class="test-info" id="testInfo"></div>
+    <label class="consent"><input type="checkbox" id="consent"><span>أُقرّ بأن البيانات صحيحة، وبأنني سأجيب عن الاختبار بنفسي دون أي مساعدة، وبأن نتيجة الاختبار سرّية تعود لإدارة المدرسة وحدها.</span></label>
     <label>رمز المشرف (يُدخله موظف المدرسة)</label>
     <input id="supPass" type="password" placeholder="رمز بدء الاختبار" autocomplete="off">
     <div class="err" id="homeErr"></div>
@@ -237,6 +353,19 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
     </div>
   </div>
 
+  <!-- السؤال الكتابي -->
+  <div id="essayScreen" class="card hidden">
+    <div class="topbar">
+      <span>السؤال الكتابي (الأخير)</span>
+      <span class="timer" id="essayTimer">10:00</span>
+    </div>
+    <div class="question" id="essayPrompt"></div>
+    <textarea id="essayText" rows="10" oninput="onEssayInput()" autocomplete="off" spellcheck="false"></textarea>
+    <div class="summary-box" id="essayCount">عدد الكلمات: 0</div>
+    <div class="err" id="essayErr"></div>
+    <button class="btn primary" onclick="submitEssay()">تسليم الاختبار</button>
+  </div>
+
   <!-- شاشة الانتهاء -->
   <div id="endScreen" class="card hidden">
     <p class="msg">شكرًا لك على تقدّمك.<br>تم استلام إجاباتك، وسيتم التواصل معك قريبًا.</p>
@@ -255,42 +384,139 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
 
   <!-- لوحة الإدارة -->
   <div id="adminScreen" class="card hidden">
-    <h2>إعدادات الاختبار</h2>
-    <p style="margin-bottom:10px">ضع إشارة على الأقسام التي تريد فحص المتقدم فيها:</p>
-    <div id="sectionChecks"></div>
-    <div class="summary-box" id="settingsSummary"></div>
-    <div class="err" id="settingsMsg"></div>
-    <h2 style="margin-top:22px">المتقدمون</h2>
-    <div id="adminList"></div>
-    <h2 style="margin-top:22px">النسخ الاحتياطي</h2>
-    <div class="summary-box" id="backupInfo"></div>
-    <button class="btn primary" onclick="exportBackup()">💾 حفظ نسخة احتياطية</button>
-    <button class="btn light" onclick="document.getElementById('restoreFile').click()">📂 استعادة نسخة احتياطية</button>
-    <input type="file" id="restoreFile" accept=".json,application/json" style="display:none" onchange="importBackup(this)">
-    <div class="err" id="backupMsg"></div>
-    <h2 style="margin-top:22px">الترخيص وكلمة السر</h2>
-    <div class="summary-box" id="licenseInfo"></div>
-    <button class="btn light" onclick="openActivation()">تفعيل / تجديد الترخيص</button>
-    <label>تغيير كلمة سر الإدارة</label>
-    <input id="chgPass" type="password" placeholder="كلمة السر الجديدة (4 أحرف على الأقل)">
-    <button class="btn light" onclick="changePass()">حفظ كلمة السر</button>
-    <div class="err" id="passMsg"></div>
-    <label>رمز المشرف لبدء الاختبار</label>
-    <p class="note">رمز يعطيه المدير للموظف الذي يجلس مع المتقدم، حتى لا يُضطر لإعطائه كلمة سر الإدارة. إن تركته فارغًا يُستخدم رمز الإدارة.</p>
-    <input id="chgSup" type="password" placeholder="رمز المشرف (4 أحرف على الأقل)">
-    <button class="btn light" onclick="changeSup()">حفظ رمز المشرف</button>
-    <div class="err" id="supMsg"></div>
-    <button class="small-link" onclick="backHome()">خروج</button>
+    <div class="admin-head">
+      <h2>لوحة الإدارة</h2>
+      <span class="role-chip" id="roleChip"></span>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="tabApplicants" onclick="openTab('tabApplicants')">👥 المتقدمون</button>
+      <button class="tab" data-tab="tabStats" onclick="openTab('tabStats')">📊 الإحصاءات</button>
+      <button class="tab" data-tab="tabSettings" id="settingsTabBtn" onclick="openTab('tabSettings')">⚙️ الإعدادات</button>
+    </div>
+
+    <!-- سجل المتقدمين -->
+    <div id="tabApplicants" class="tab-pane">
+      <input id="fSearch" type="search" placeholder="🔍 بحث بالاسم أو الهاتف أو الرقم الوطني أو الرقم المرجعي" oninput="renderLog()">
+      <div class="filters">
+        <select id="fSubject" onchange="renderLog()">
+          <option value="">كل المواد</option>
+          <option>اللغة العربية</option>
+          <option>اللغة الإنجليزية</option>
+        </select>
+        <select id="fRec" onchange="renderLog()">
+          <option value="">كل النتائج</option>
+          <option value="yes">الموصى بتعيينهم</option>
+          <option value="no">غير الموصى بهم</option>
+        </select>
+        <select id="fPeriod" onchange="renderLog()">
+          <option value="">كل الفترات</option>
+          <option value="30">آخر 30 يومًا</option>
+          <option value="90">آخر 3 أشهر</option>
+          <option value="year">هذه السنة</option>
+        </select>
+        <select id="fSort" onchange="renderLog()">
+          <option value="new">الأحدث أولًا</option>
+          <option value="score">ترتيب حسب نتيجة الاختبار</option>
+          <option value="final">ترتيب حسب النتيجة النهائية</option>
+        </select>
+      </div>
+      <div class="summary-box" id="logCount"></div>
+      <div id="adminList"></div>
+      <p class="note">ضع إشارة ✔ بجانب متقدمَين أو ثلاثة للمقارنة بينهم.</p>
+      <button class="btn primary" id="compareBtn" onclick="openCompare()" disabled>مقارنة المحددين</button>
+      <button class="btn light" onclick="exportExcel()">📊 تصدير القائمة إلى Excel</button>
+    </div>
+
+    <!-- الإحصاءات -->
+    <div id="tabStats" class="tab-pane hidden">
+      <div id="statsBody"></div>
+    </div>
+
+    <!-- الإعدادات -->
+    <div id="tabSettings" class="tab-pane hidden">
+      <div class="set-group">
+        <h3>🏫 بيانات المدرسة (تظهر في التقرير المطبوع)</h3>
+        <label>اسم المدرسة</label>
+        <input id="setSchool" type="text" placeholder="مثال: مدرسة النور الأساسية">
+        <label>اسم مدير/ة المدرسة</label>
+        <input id="setPrincipal" type="text" placeholder="مثال: أ. محمد العلي">
+        <label>شعار المدرسة</label>
+        <div class="logo-row">
+          <img id="logoPreview" class="hidden" alt="الشعار">
+          <button class="btn light" onclick="document.getElementById('logoFile').click()">اختيار صورة الشعار</button>
+          <button class="small-link" id="logoRemove" onclick="removeLogo()">حذف الشعار</button>
+        </div>
+        <input type="file" id="logoFile" accept="image/*" style="display:none" onchange="loadLogo(this)">
+        <label>علامة النجاح (الحد الأدنى للتوصية بالتعيين)</label>
+        <input id="setPass" type="number" min="50" max="85" step="1" dir="ltr">
+        <p class="note">بين 50 و85 — الافتراضي 65. من يحصل على أقل منها: «لا يُوصى به».</p>
+        <label class="check"><input type="checkbox" id="setEssay"> إضافة سؤال كتابي في نهاية الاختبار (10 دقائق) يصححه مشرف المادة</label>
+        <button class="btn primary" onclick="saveSchoolSettings()">حفظ بيانات المدرسة</button>
+        <div class="err" id="schoolMsg"></div>
+      </div>
+
+      <div class="set-group">
+        <h3>📝 أقسام الاختبار</h3>
+        <p style="margin-bottom:10px">ضع إشارة على الأقسام التي تريد فحص المتقدم فيها:</p>
+        <div id="sectionChecks"></div>
+        <div class="summary-box" id="settingsSummary"></div>
+        <div class="err" id="settingsMsg"></div>
+      </div>
+
+      <div class="set-group">
+        <h3>🔐 الرموز والمستخدمون</h3>
+        <label>رمز المشرف لبدء الاختبار</label>
+        <p class="note">يعطيه المدير للموظف الذي يجلس مع المتقدم. إن تركته فارغًا يُستخدم رمز الإدارة.</p>
+        <input id="chgSup" type="password" placeholder="رمز المشرف (4 أحرف على الأقل)">
+        <button class="btn light" onclick="changeSup()">حفظ رمز المشرف</button>
+        <div class="err" id="supMsg"></div>
+        <label>دخول مشرف اللغة العربية</label>
+        <p class="note">كلمة سر خاصة بمشرف المادة: يرى تقارير مادته فقط، ويصحح السؤال الكتابي، ولا يرى الإعدادات.</p>
+        <input id="supAr" type="password" placeholder="كلمة سر مشرف العربية (اتركها فارغة للإلغاء)">
+        <label>دخول مشرف اللغة الإنجليزية</label>
+        <input id="supEn" type="password" placeholder="كلمة سر مشرف الإنجليزية (اتركها فارغة للإلغاء)">
+        <button class="btn light" onclick="saveSupCodes()">حفظ كلمات سر المشرفين</button>
+        <div class="err" id="supCodesMsg"></div>
+      </div>
+
+      <div class="set-group">
+        <h3>💾 النسخ الاحتياطي</h3>
+        <div class="summary-box" id="backupInfo"></div>
+        <button class="btn primary" onclick="exportBackup()">💾 حفظ نسخة احتياطية</button>
+        <button class="btn light" onclick="document.getElementById('restoreFile').click()">📂 استعادة نسخة احتياطية</button>
+        <input type="file" id="restoreFile" accept=".json,application/json" style="display:none" onchange="importBackup(this)">
+        <div class="err" id="backupMsg"></div>
+      </div>
+
+      <div class="set-group">
+        <h3>🔑 الترخيص وكلمة سر الإدارة</h3>
+        <div class="summary-box" id="licenseInfo"></div>
+        <button class="btn light" onclick="openActivation()">تفعيل / تجديد الترخيص</button>
+        <label>تغيير كلمة سر الإدارة</label>
+        <input id="chgPass" type="password" placeholder="كلمة السر الجديدة (4 أحرف على الأقل)">
+        <button class="btn light" onclick="changePass()">حفظ كلمة السر</button>
+        <div class="err" id="passMsg"></div>
+      </div>
+    </div>
+
+    <button class="small-link" onclick="logout()">تسجيل الخروج</button>
+  </div>
+
+  <!-- مقارنة المتقدمين -->
+  <div id="compareScreen" class="card hidden">
+    <div id="compareBody"></div>
+    <button class="btn light" onclick="window.print()">🖨️ طباعة المقارنة / حفظ PDF</button>
+    <button class="small-link" onclick="backToAdmin()">رجوع إلى قائمة المتقدمين</button>
   </div>
 
   <!-- تقرير المتقدم -->
   <div id="reportScreen" class="card hidden">
-    <h2>تقرير المتقدم</h2>
     <div id="reportBody"></div>
-    <button class="btn primary" onclick="shareReport()">مشاركة التقرير عبر واتساب</button>
+    <button class="btn primary" onclick="printReport()">🖨️ طباعة التقرير الرسمي / حفظ PDF</button>
+    <button class="btn light" onclick="shareReport()">مشاركة التقرير عبر واتساب</button>
     <button class="btn light" id="apologyBtn" onclick="sendApology()">إرسال رسالة الاعتذار للمتقدم</button>
-    <button class="btn light" onclick="printReport()">طباعة التقرير</button>
-    <button class="small-link" onclick="renderAdmin();show('adminScreen')">قائمة المتقدمين وإعدادات الاختبار</button>
+    <button class="btn danger-btn" id="deleteBtn" onclick="deleteReport()">🗑️ حذف هذا التقرير</button>
+    <button class="small-link" onclick="backToAdmin()">رجوع إلى قائمة المتقدمين</button>
   </div>
 
 </main>
@@ -463,15 +689,10 @@ function changePass(){
   msg.textContent = "تم حفظ كلمة السر الجديدة ✔";
 }
 function getSup(){ return lsGet('ttSupPass') || getPass(); }
-function supOk(p){ return !!p && (p === getSup() || p === getPass()); }
-function changeSup(){
-  const p = document.getElementById('chgSup').value;
-  const msg = document.getElementById('supMsg');
-  if(p.length < 4){ msg.classList.remove('ok'); msg.textContent = "رمز المشرف يجب أن يكون 4 أحرف على الأقل"; return; }
-  lsSet('ttSupPass', p);
-  document.getElementById('chgSup').value = "";
-  msg.classList.add('ok');
-  msg.textContent = "تم حفظ رمز المشرف ✔";
+function supOk(p){
+  if(!p) return false;
+  const c = supCodes();
+  return p === getSup() || p === getPass() || Object.values(c).includes(p);
 }
 
 const sections = {
@@ -1098,7 +1319,7 @@ function applySettings(){
 function updateTestInfo(){
   const list = loadSettings();
   const el = document.getElementById('testInfo');
-  if(el) el.textContent = `يشمل الاختبار: ${sectionNames(list)} — ${countQuestions(list)} سؤالًا خلال ${testMinutes(list)} دقيقة`;
+  if(el) el.textContent = `يشمل الاختبار: ${sectionNames(list)} — ${countQuestions(list)} سؤالًا خلال ${testMinutes(list)} دقيقة` + (essayOn() ? ` + سؤال كتابي (${ESSAY_MINUTES} دقائق)` : "");
   const w = document.getElementById('welcomeSections');
   if(w) w.textContent = Object.keys(SUBJECTS).map(sub => {
     const l = loadSettings(sub);
@@ -1114,6 +1335,7 @@ function updateTestInfo(){
 function show(id){
   document.querySelectorAll('main > .card').forEach(c => c.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
+  document.body.classList.toggle('wide', ['adminScreen','reportScreen','compareScreen'].includes(id));
   window.scrollTo(0,0);
 }
 
@@ -1126,32 +1348,51 @@ function shuffle(arr){
 }
 
 function startTest(){
-  const name = document.getElementById('name').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const degree = document.getElementById('degree').value;
-  const experience = document.getElementById('experience').value;
+  const val = id => document.getElementById(id).value.trim();
+  const name = val('name');
+  const phone = toLatin(val('phone')).replace(/\s|-/g, "");
+  const nid = toLatin(val('nid')).replace(/\s|-/g, "").toUpperCase();
+  const degree = val('degree'), experience = val('experience'), stageApplied = val('stageApplied');
   const err = document.getElementById('homeErr');
 
-  if(!name || !phone || !degree || !experience){ err.textContent = "يرجى تعبئة جميع البيانات"; return; }
+  if(!name || !phone || !nid || !degree || !experience || !stageApplied){ err.textContent = "يرجى تعبئة الاسم والرقم الوطني والهاتف والمرحلة والمؤهل والخبرة"; return; }
+  if(name.split(/\s+/).length < 3){ err.textContent = "يرجى كتابة الاسم الثلاثي أو الرباعي"; return; }
+  if(!/^[0-9A-Z]{6,15}$/.test(nid)){ err.textContent = "الرقم الوطني / رقم الإقامة غير صحيح"; return; }
   if(!/^07\d{8}$/.test(phone)){ err.textContent = "رقم الهاتف غير صحيح (مثال: 0791234567)"; return; }
+  if(!document.getElementById('consent').checked){ err.textContent = "يرجى الموافقة على الإقرار قبل البدء"; return; }
   if(!canTest()){ err.textContent = "التطبيق غير مفعّل — يرجى مراجعة إدارة المدرسة"; return; }
   const sp = document.getElementById('supPass');
   if(!supOk(sp.value)){ err.textContent = "رمز المشرف غير صحيح — يُدخله موظف المدرسة"; return; }
+  const subject = document.getElementById('subject').value;
+
+  // منع إعادة الاختبار خلال 6 أشهر إلا بموافقة المشرف
+  const prev = loadResults().filter(r => r.subject === subject && ((r.nid && r.nid === nid) || r.phone === phone))
+    .sort((a, b) => (b.ts || 0) - (a.ts || 0))[0];
+  let retestOf = "";
+  if(prev){
+    const recent = !prev.ts || (Date.now() - prev.ts) < RETEST_DAYS * 86400000;
+    if(recent && !confirm(`تنبيه للمشرف: هذا المتقدم اختُبر سابقًا في ${subject} بتاريخ ${prev.date} وحصل على ${prev.percent}%.\nهل تريد السماح له بإعادة الاختبار؟`)) return;
+    retestOf = `${prev.date} (${prev.percent}%)`;
+  }
   sp.value = "";
   err.textContent = "";
 
-  const lic = licenseState();
   candidate = {
-    name, phone, degree, experience,
-    subject: document.getElementById('subject').value,
-    school: lic.status === 'active' ? lic.school : "",
-    date: new Date().toLocaleString('ar-JO')
+    id: makeRef(),
+    ts: Date.now(),
+    name, nid, phone, degree, experience, subject,
+    gpa: val('gpa'), university: val('university'), gradYear: val('gradYear'),
+    stageApplied: +stageApplied,
+    school: schoolName(),
+    date: new Date().toLocaleString('ar-JO'),
+    retestOf
   };
   const formIndex = Math.floor(Math.random() * FORMS.length);
   candidate.form = FORMS[formIndex];
   const active = loadSettings();
   candidate.sections = active;
   candidate.minutes = testMinutes(active);
+  candidate.essayEnabled = essayOn();
   finished = false;
   order = [];
   active.forEach(key => {
@@ -1169,6 +1410,9 @@ function startTest(){
   answers = new Array(order.length).fill(null);
   current = 0;
   timeLeft = candidate.minutes * 60;
+  phase = 'mc';
+  essayLeft = 0;
+  candidate.secTime = {};        // الوقت المستغرق في كل قسم (بالثواني)
   candidate.leaves = 0;          // مرات الخروج من شاشة الاختبار
   candidate.leaveLog = [];       // أوقات الخروج
   candidate.resumes = 0;         // مرات استكمال الاختبار بعد انقطاعه
@@ -1182,8 +1426,8 @@ function beginGuardedTest(){
   finished = false;
   guardActive = true;
   enterFullscreen();
-  show('testScreen');
-  renderQ();
+  if(phase === 'essay') goEssay();
+  else { show('testScreen'); renderQ(); }
   saveProgress();
   startTimer();
 }
@@ -1234,12 +1478,17 @@ function onFsChange(){
 document.addEventListener('fullscreenchange', onFsChange);
 document.addEventListener('webkitfullscreenchange', onFsChange);
 
-['copy','cut','paste','contextmenu','selectstart','dragstart'].forEach(ev =>
-  document.addEventListener(ev, e => { if(guardActive && !finished) e.preventDefault(); }));
+['copy','cut','paste','contextmenu','selectstart','dragstart','drop'].forEach(ev =>
+  document.addEventListener(ev, e => {
+    if(!guardActive || finished) return;
+    if(ev === 'selectstart' && e.target && e.target.id === 'essayText') return;   // الكتابة في السؤال الكتابي
+    e.preventDefault();
+  }));
 document.addEventListener('keydown', e => {
   if(!guardActive || finished) return;
   const k = (e.key || "").toLowerCase();
   if((e.ctrlKey || e.metaKey) && ['c','x','v','a','p','s','u'].includes(k)) e.preventDefault();
+  if(k === 'enter' && phase === 'mc' && e.target.tagName !== 'BUTTON') e.preventDefault();
   if(k === 'f12' || k === 'printscreen') e.preventDefault();
 });
 window.addEventListener('beforeunload', e => {
@@ -1248,7 +1497,7 @@ window.addEventListener('beforeunload', e => {
 
 function saveProgress(){
   if(!guardActive || finished) return;
-  lsSet('ttInProgress', JSON.stringify({ candidate, order, answers, current, timeLeft, saved: Date.now() }));
+  lsSet('ttInProgress', JSON.stringify({ candidate, order, answers, current, timeLeft, phase, essayLeft, saved: Date.now() }));
 }
 function clearProgress(){ try { localStorage.removeItem('ttInProgress'); } catch(e){} }
 
@@ -1257,9 +1506,11 @@ function renderResumeBox(){
   const p = lsJSON('ttInProgress');
   if(!p || !p.candidate || !Array.isArray(p.order)){ box.classList.add('hidden'); return; }
   const done = p.answers.filter(a => a !== null).length;
+  const where = p.phase === 'essay'
+    ? `أنهى أسئلة الاختيار من متعدد، وكان في السؤال الكتابي (بقي ${fmtTime(Math.max(p.essayLeft || 0, 0))}).`
+    : `أجاب عن ${done} من ${p.order.length} سؤالًا، والوقت المتبقي ${fmtTime(Math.max(p.timeLeft, 0))}.`;
   document.getElementById('resumeText').textContent =
-    `المتقدم: ${p.candidate.name} — ${p.candidate.subject}\n` +
-    `أجاب عن ${done} من ${p.order.length} سؤالًا، والوقت المتبقي ${fmtTime(Math.max(p.timeLeft, 0))}.\n` +
+    `المتقدم: ${p.candidate.name} — ${p.candidate.subject}\n${where}\n` +
     `انقطع الاختبار بتاريخ ${new Date(p.saved).toLocaleString('ar-JO')}.`;
   document.getElementById('resumeText').style.whiteSpace = 'pre-line';
   document.getElementById('resumeErr').textContent = "";
@@ -1274,6 +1525,9 @@ function loadInterrupted(){
   candidate = p.candidate; order = p.order; answers = p.answers;
   current = Math.min(p.current || 0, order.length - 1);
   timeLeft = p.timeLeft;
+  phase = p.phase || 'mc';
+  essayLeft = p.essayLeft || 0;
+  candidate.secTime = candidate.secTime || {};
   candidate.leaves = candidate.leaves || 0;
   candidate.leaveLog = candidate.leaveLog || [];
   candidate.resumes = candidate.resumes || 0;
@@ -1282,7 +1536,11 @@ function loadInterrupted(){
 function resumeTest(){
   if(!loadInterrupted()) return;
   candidate.resumes++;
-  if(timeLeft <= 0){ guardActive = true; finished = false; finishTest(); return; }
+  if(phase === 'mc' && timeLeft <= 0){
+    if(candidate.essayEnabled) phase = 'essay';
+    else { guardActive = true; finished = false; finishTest(); return; }
+  }
+  if(phase === 'essay' && essayLeft <= 0 && candidate.essayPrompt){ guardActive = true; finished = false; finishTest(); return; }
   beginGuardedTest();
 }
 function submitInterrupted(){
@@ -1325,14 +1583,11 @@ function nextQ(){
     document.getElementById('testErr').textContent = "يرجى اختيار إجابة";
     return;
   }
-  if(current < order.length - 1){ current++; renderQ(); saveProgress(); }
-  else {
-    guardActive = false;   // نافذة التأكيد لا تُحسب خروجًا
-    const ok = confirm("هل أنت متأكد من إنهاء الاختبار؟");
-    guardActive = true;
-    lastLeave = Date.now();
-    if(ok) finishTest(); else enterFullscreen();
-  }
+  if(current < order.length - 1){ current++; renderQ(); saveProgress(); return; }
+  const msg = candidate.essayEnabled
+    ? "هل أنت متأكد من إنهاء أسئلة الاختيار من متعدد؟\nستنتقل إلى السؤال الكتابي الأخير، ولا يمكنك الرجوع بعدها."
+    : "هل أنت متأكد من إنهاء الاختبار؟";
+  if(askGuarded(msg)){ if(candidate.essayEnabled) goEssay(); else finishTest(); }
 }
 
 function prevQ(){
@@ -1343,19 +1598,27 @@ function startTimer(){
   clearInterval(timerId);
   updateTimer();
   timerId = setInterval(() => {
+    if(phase === 'essay'){
+      essayLeft--;
+      updateTimer();
+      if(essayLeft % 5 === 0) saveProgress();
+      if(essayLeft <= 0) finishTest();
+      return;
+    }
     timeLeft--;
+    const item = order[current];
+    if(item){ const k = questions[item.i].s; candidate.secTime[k] = (candidate.secTime[k] || 0) + 1; }
     updateTimer();
     if(timeLeft % 5 === 0) saveProgress();
-    if(timeLeft <= 0){ finishTest(); }
+    if(timeLeft <= 0){ if(candidate.essayEnabled) goEssay(); else finishTest(); }
   }, 1000);
 }
 
 function updateTimer(){
-  const m = String(Math.floor(timeLeft / 60)).padStart(2,'0');
-  const s = String(timeLeft % 60).padStart(2,'0');
-  const t = document.getElementById('timer');
-  t.textContent = m + ':' + s;
-  t.classList.toggle('warn', timeLeft <= 300);
+  const left = phase === 'essay' ? essayLeft : timeLeft;
+  const t = document.getElementById(phase === 'essay' ? 'essayTimer' : 'timer');
+  t.textContent = fmtTime(left);
+  t.classList.toggle('warn', left <= (phase === 'essay' ? 60 : 300));
 }
 
 function loadResults(){
@@ -1390,61 +1653,59 @@ function finishTest(){
   Object.values(scores).forEach(v => correct += v.correct);
   const percent = Math.round(correct / order.length * 100);
   const timeUsed = candidate.minutes * 60 - Math.max(timeLeft, 0);
-
+  const extra = {};
+  if(candidate.essayEnabled && candidate.essayPrompt){
+    extra.essayText = (candidate.essayText || "").trim();
+    extra.essayWords = wordCount(extra.essayText);
+    extra.essayTime = ESSAY_MINUTES * 60 - Math.max(essayLeft, 0);
+  }
   const results = loadResults();
-  results.push({ ...candidate, scores, percent, correct, totalQ: order.length,
+  results.push({ ...candidate, ...extra, scores, percent, correct, totalQ: order.length,
     unanswered: answers.filter(a => a === null).length, timeUsed, wrong });
-  try { localStorage.setItem('teacherResults', JSON.stringify(results)); } catch(e){}
+  saveResults(results);
+  phase = 'mc';
   show('endScreen');
 }
 
 function login(){
   const p = document.getElementById('pass').value;
-  if(p === getPass()){
-    document.getElementById('pass').value = "";
-    document.getElementById('loginErr').textContent = "";
-    const res = loadResults();
-    if(res.length){ openReport(res.length - 1); }
-    else { renderAdmin(); show('adminScreen'); }
-  } else {
-    document.getElementById('loginErr').textContent = "كلمة السر غير صحيحة";
+  const err = document.getElementById('loginErr');
+  let r = null;
+  if(p && p === getPass()) r = { type: 'admin' };
+  else {
+    const c = supCodes();
+    const sub = Object.keys(c).find(s => c[s] && c[s] === p);
+    if(sub) r = { type: 'sup', subject: sub };
   }
+  if(!r){ err.textContent = "كلمة السر غير صحيحة"; return; }
+  document.getElementById('pass').value = "";
+  err.textContent = "";
+  role = r;
+  compareSel = new Set();
+  renderAdmin();
+  openTab('tabApplicants');
+  show('adminScreen');
 }
 
 function renderAdmin(){
-  renderSettings();
-  const st = licenseState();
-  document.getElementById('licenseInfo').textContent = licenseText(st) + " — رمز الجهاز: " + getDeviceId();
-  document.getElementById('passMsg').textContent = getPass() === DEFAULT_PASS ? "⚠️ أنت تستخدم كلمة السر الافتراضية، يُنصح بتغييرها" : "";
-  document.getElementById('passMsg').classList.remove('ok');
-  renderBackupInfo();
-  const list = document.getElementById('adminList');
-  const results = loadResults();
-  list.innerHTML = "";
-  if(results.length === 0){
-    list.textContent = "لا يوجد متقدمون بعد.";
-    return;
+  if(!role) role = { type: 'admin' };
+  const admin = isAdmin();
+  document.getElementById('roleChip').textContent = admin ? "👤 مدير المدرسة" : "👤 مشرف " + role.subject;
+  document.getElementById('settingsTabBtn').style.display = admin ? '' : 'none';
+  const fs = document.getElementById('fSubject');
+  if(!admin){ fs.value = role.subject; fs.disabled = true; } else fs.disabled = false;
+  if(admin){
+    renderSettings();
+    renderSchoolSettings();
+    renderBackupInfo();
+    const st = licenseState();
+    document.getElementById('licenseInfo').textContent = licenseText(st) + " — رمز الجهاز: " + getDeviceId();
+    const pm = document.getElementById('passMsg');
+    pm.textContent = getPass() === DEFAULT_PASS ? "⚠️ أنت تستخدم كلمة السر الافتراضية، يُنصح بتغييرها" : "";
+    pm.classList.remove('ok');
   }
-  const table = document.createElement('table');
-  const head = document.createElement('tr');
-  ["الاسم","التاريخ","النتيجة","التقرير"].forEach(h => {
-    const th = document.createElement('th'); th.textContent = h; head.appendChild(th);
-  });
-  table.appendChild(head);
-  for(let idx = results.length - 1; idx >= 0; idx--){
-    const r = results[idx];
-    const tr = document.createElement('tr');
-    [r.name, r.date, r.percent + "%"].forEach(v => {
-      const td = document.createElement('td'); td.textContent = v; tr.appendChild(td);
-    });
-    const td = document.createElement('td');
-    const b = document.createElement('button');
-    b.className = 'view-btn'; b.textContent = 'عرض';
-    b.onclick = () => openReport(idx);
-    td.appendChild(b); tr.appendChild(td);
-    table.appendChild(tr);
-  }
-  list.appendChild(table);
+  renderLog();
+  renderStats();
 }
 
 // ===== النسخ الاحتياطي والاستعادة =====
@@ -1483,7 +1744,8 @@ async function exportBackup(){
     school: lic.status === 'active' ? lic.school : "",
     device: getDeviceId(),
     results,
-    settings: lsJSON('teacherSettings')
+    settings: lsJSON('teacherSettings'),
+    schoolInfo: schoolInfo()
   };
   const d = new Date();
   const stamp = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,'0') + "-" + String(d.getDate()).padStart(2,'0');
@@ -1535,8 +1797,8 @@ function importBackup(input){
         current.push(r); seen.add(resultKey(r)); added++;
       }
     });
-    try { localStorage.setItem('teacherResults', JSON.stringify(current)); }
-    catch(e){ backupMsg("❌ تعذّر الحفظ على هذا الجهاز"); return; }
+    if(!saveResults(current)){ backupMsg("❌ تعذّر الحفظ على هذا الجهاز"); return; }
+    if(data.schoolInfo && !lsGet('ttSchool')) lsSet('ttSchool', JSON.stringify(data.schoolInfo));
     if(data.settings && !lsGet('teacherSettings')){
       try { localStorage.setItem('teacherSettings', JSON.stringify(data.settings)); } catch(e){}
     }
@@ -1554,25 +1816,48 @@ let currentReport = null;
 function analyze(r){
   const rows = Object.keys(sections).filter(k => r.scores && r.scores[k] && r.scores[k].total).map(k => {
     const v = r.scores[k];
-    return { name: sections[k], correct: v.correct, total: v.total, p: Math.round(v.correct / v.total * 100) };
+    return { key: k, name: sections[k], correct: v.correct, total: v.total, p: Math.round(v.correct / v.total * 100),
+             time: r.secTime ? r.secTime[k] : undefined };
   });
   const weak = rows.filter(x => x.p < 70).map(x => x.name);
   const danger = rows.filter(x => x.p < 50).map(x => x.name);
   const strong = rows.filter(x => x.p >= 85).map(x => x.name);
-  let rec, cls, level;
-  if(r.percent >= 85){ level = "ممتاز"; rec = "أوصي بتعيينه"; cls = "good"; }
-  else if(r.percent >= 70){ level = "جيد"; rec = "أوصي بتعيينه مع المتابعة"; cls = "mid"; }
-  else if(r.percent >= 50){ level = "ضعيف"; rec = "لا أوصي بتعيينه إلا بعد تدريب"; cls = "bad"; }
-  else { level = "غير مناسب"; rec = "لا أوصي بتعيينه"; cls = "bad"; }
-  // المرحلة المناسبة لمعلم اللغة الإنجليزية
-  let stage = "";
+
+  // النتيجة النهائية = الاختبار + الكتابة + المقابلة (ما توفر منها)
+  const parts = [{ name: "اختبار الاختيار من متعدد", w: WEIGHTS.test, v: r.percent }];
+  if(typeof r.essayScore === 'number') parts.push({ name: "السؤال الكتابي", w: WEIGHTS.essay, v: r.essayScore * 10 });
+  const iv = interviewTotal(r);
+  if(iv !== null) parts.push({ name: "المقابلة الشخصية", w: WEIGHTS.interview, v: Math.round(iv / (INTERVIEW.length * 5) * 100) });
+  const final = parts.length > 1 ? Math.round(parts.reduce((s, x) => s + x.w * x.v, 0) / parts.reduce((s, x) => s + x.w, 0)) : null;
+  const basis = final !== null ? final : r.percent;
+
+  const pm = passMark();
+  let level, rec, cls, recommended;
+  if(basis >= 85 && basis >= pm){ level = "ممتاز"; rec = "أوصي بتعيينه"; cls = "good"; recommended = true; }
+  else if(basis >= 75 && basis >= pm){ level = "جيد جدًا"; rec = "أوصي بتعيينه"; cls = "good"; recommended = true; }
+  else if(basis >= pm){ level = "مقبول"; rec = "أوصي بتعيينه مع المتابعة والتدريب"; cls = "mid"; recommended = true; }
+  else { level = "لا يُوصى به"; rec = "لا أوصي بتعيينه"; cls = "bad"; recommended = false; }
+
+  // المرحلة المناسبة (حسب نتيجة الاختبار)
+  let stageRank, stage;
+  if(r.percent >= 85){ stageRank = 3; stage = "يصلح لجميع المراحل حتى الثانوية (التوجيهي)"; }
+  else if(r.percent >= 70){ stageRank = 2; stage = "يصلح للمرحلة الأساسية العليا (من السابع إلى العاشر)"; }
+  else if(r.percent >= 55){ stageRank = 1; stage = "يصلح للمرحلة الأساسية الدنيا فقط (من الأول إلى السادس)"; }
+  else { stageRank = 0; stage = "لا يصلح لأي مرحلة حاليًا"; }
+  let stageWarn = "";
+  if(r.stageApplied && stageRank < r.stageApplied)
+    stageWarn = `متقدم لـ${STAGES[r.stageApplied]}، بينما مستواه ${stageRank ? "يناسب " + STAGES[stageRank] : "لا يناسب أي مرحلة حاليًا"}`;
+
+  // المستوى التقريبي وفق الإطار الأوروبي (للإنجليزي)
+  let cefr = "";
   if(r.subject === "اللغة الإنجليزية"){
-    if(r.percent >= 85) stage = "يصلح لجميع المراحل حتى الثانوية (التوجيهي)";
-    else if(r.percent >= 70) stage = "يصلح للمرحلة الأساسية العليا (من السابع إلى العاشر)";
-    else if(r.percent >= 55) stage = "يصلح للمرحلة الأساسية الدنيا فقط (من الأول إلى السادس)";
-    else stage = "لا يصلح لأي مرحلة حاليًا";
+    if(r.percent >= 88) cefr = "C1 — متقدم";
+    else if(r.percent >= 75) cefr = "B2 — فوق المتوسط";
+    else if(r.percent >= 60) cefr = "B1 — متوسط";
+    else if(r.percent >= 45) cefr = "A2 — أساسي";
+    else cefr = "A1 — مبتدئ";
   }
-  return { rows, weak, danger, strong, rec, cls, level, stage };
+  return { rows, weak, danger, strong, rec, cls, level, recommended, stage, stageRank, stageWarn, cefr, parts, final, iv };
 }
 
 function apologyText(r, a){
@@ -1587,18 +1872,30 @@ function apologyText(r, a){
 function reportText(r, a){
   let t = `*تقرير اختبار كفاءة المعلمين*\n`;
   if(r.school) t += `${r.school}\n`;
-  t += `الاسم: ${r.name}\nالهاتف: ${r.phone}\nالمادة: ${r.subject}\nالمؤهل: ${r.degree}\nالخبرة: ${r.experience}\nالنموذج: ${r.form || "-"}\nتاريخ الاختبار: ${r.date}\n\n`;
-  t += `الأقسام المفحوصة: ${a.rows.map(x => x.name).join('، ')}\n`;
+  if(r.id) t += `الرقم المرجعي: ${r.id}\n`;
+  t += `\nالاسم: ${r.name}\n`;
+  if(r.nid) t += `الرقم الوطني: ${r.nid}\n`;
+  t += `الهاتف: ${r.phone}\nالمادة: ${r.subject}\n`;
+  if(r.stageApplied) t += `المرحلة المتقدَّم لها: ${STAGES[r.stageApplied]}\n`;
+  t += `المؤهل: ${r.degree}${r.gpa ? " — " + r.gpa : ""}\n`;
+  if(r.university) t += `الجامعة: ${r.university}${r.gradYear ? " (" + r.gradYear + ")" : ""}\n`;
+  t += `الخبرة: ${r.experience}\nالنموذج: ${r.form || "-"}\nتاريخ الاختبار: ${r.date}\n\n`;
   if(r.totalQ) t += `الإجابات الصحيحة: ${r.correct} من ${r.totalQ}\n`;
   if(r.timeUsed !== undefined) t += `الوقت المستغرق: ${fmtTime(r.timeUsed)} من ${r.minutes} دقيقة\n`;
-  t += `*النتيجة النهائية: ${r.percent}% (${a.level})*\n`;
-  if(a.stage) t += `*المرحلة المناسبة: ${a.stage}*\n`;
+  t += `*نتيجة الاختبار: ${r.percent}%*\n`;
   a.rows.forEach(x => t += `- ${x.name}: ${x.correct} من ${x.total} (${x.p}%)\n`);
+  t += `*المرحلة المناسبة: ${a.stage}*\n`;
+  if(a.stageWarn) t += `⚠️ ${a.stageWarn}\n`;
+  if(a.cefr) t += `المستوى التقريبي (CEFR): ${a.cefr}\n`;
   if(a.strong.length) t += `\nنقاط القوة: ${a.strong.join('، ')}`;
   if(a.weak.length) t += `\nنقاط الضعف: ${a.weak.join('، ')}`;
   if(a.danger.length) t += `\n⚠️ تنبيه: ضعف شديد في ${a.danger.join('، ')}`;
+  if(typeof r.essayScore === 'number') t += `\n\nالسؤال الكتابي: ${r.essayScore} من 10`;
+  if(a.iv !== null) t += `\nالمقابلة الشخصية: ${a.iv} من ${INTERVIEW.length * 5}`;
+  if(a.final !== null) t += `\n*النتيجة النهائية: ${a.final}%*`;
   if(r.leaves !== undefined) t += `\n\n*سلوك المتقدم أثناء الاختبار:* ${behaviorSummary(r)}`;
-  t += `\n\n*التوصية: ${a.rec}*\n\ndahshansoft.com`;
+  if(r.retestOf) t += `\n⚠️ إعادة اختبار — الاختبار السابق: ${r.retestOf}`;
+  t += `\n\n*التقدير: ${a.level}*\n*التوصية: ${a.rec}*\n\ndahshansoft.com`;
   return t;
 }
 
@@ -1638,94 +1935,203 @@ function addLine(box, label, value){
 }
 
 function openReport(idx){
-  const r = loadResults()[idx];
+  const all = loadResults();
+  const r = all[idx];
   if(!r) return;
   const a = analyze(r);
-  currentReport = { r, a };
+  currentReport = { r, a, idx };
   const body = document.getElementById('reportBody');
   body.innerHTML = "";
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if(cls) e.className = cls; if(text !== undefined) e.textContent = text; return e; };
+  const sub = text => body.appendChild(el('div', 'sub-h', text));
 
-  const info = document.createElement('div'); info.className = 'info';
-  if(r.school) addLine(info, "المدرسة", r.school);
+  // رأس التقرير الرسمي
+  const info0 = schoolInfo();
+  const head = el('div', 'report-head');
+  if(info0.logo){ const img = document.createElement('img'); img.src = info0.logo; img.alt = ""; head.appendChild(img); }
+  const ht = el('div', 'rh-text');
+  ht.appendChild(el('b', '', r.school || schoolName() || "إدارة المدرسة"));
+  ht.appendChild(el('span', '', "تقرير اختبار كفاءة متقدم لوظيفة معلم"));
+  ht.appendChild(el('span', '', "وفق المنهاج الأردني — " + r.subject));
+  head.appendChild(ht);
+  const ref = el('div', 'rh-ref');
+  ref.textContent = "Ref: " + (r.id || "—") + "\n" + new Date().toLocaleDateString('en-GB');
+  ref.style.whiteSpace = 'pre-line';
+  head.appendChild(ref);
+  body.appendChild(head);
+
+  // بيانات المتقدم
+  const info = el('div', 'info');
   addLine(info, "الاسم", r.name);
+  if(r.nid) addLine(info, "الرقم الوطني", r.nid);
   addLine(info, "الهاتف", r.phone);
   addLine(info, "المادة", r.subject);
-  addLine(info, "المؤهل", r.degree);
+  if(r.stageApplied) addLine(info, "المرحلة المتقدَّم لها", STAGES[r.stageApplied]);
+  addLine(info, "المؤهل", r.degree + (r.gpa ? " — تقدير " + r.gpa : ""));
+  if(r.university) addLine(info, "الجامعة", r.university + (r.gradYear ? " — تخرّج " + r.gradYear : ""));
   addLine(info, "الخبرة", r.experience);
   addLine(info, "النموذج", r.form || "-");
   addLine(info, "تاريخ الاختبار", r.date);
-  addLine(info, "الأقسام المفحوصة", a.rows.map(x => x.name).join('، '));
-  if(r.totalQ) addLine(info, "الإجابات الصحيحة", r.correct + " من " + r.totalQ + " سؤالًا");
-  if(r.totalQ) addLine(info, "أسئلة لم يُجب عنها", String(r.unanswered || 0));
   if(r.timeUsed !== undefined) addLine(info, "الوقت المستغرق", fmtTime(r.timeUsed) + " من " + r.minutes + " دقيقة");
-  addLine(info, "النتيجة النهائية", r.percent + "% (" + a.level + ")");
-  if(a.stage) addLine(info, "المرحلة المناسبة", a.stage);
+  if(r.totalQ) addLine(info, "الإجابات الصحيحة", r.correct + " من " + r.totalQ + " سؤالًا" + (r.unanswered ? ` (${r.unanswered} بلا إجابة)` : ""));
   body.appendChild(info);
+
+  if(r.retestOf) body.appendChild(el('div', 'warn-box', "⚠️ إعادة اختبار — سبق اختبار هذا المتقدم بتاريخ " + r.retestOf));
+
+  // شريط النتائج
+  const strip = el('div', 'score-strip');
+  const cell = (v, l) => { const d = el('div'); d.appendChild(el('b', '', v)); d.appendChild(el('span', '', l)); strip.appendChild(d); };
+  cell(r.percent + "%", "نتيجة الاختبار");
+  cell(a.final !== null ? a.final + "%" : "—", "النتيجة النهائية");
+  cell(a.level, "التقدير");
+  body.appendChild(strip);
+
+  // الأقسام برسم بياني
+  sub("نتائج الأقسام");
+  const bars = el('div', 'bars');
+  a.rows.forEach(x => {
+    const row = el('div', 'bar-row');
+    const nm = el('div', '', x.name);
+    if(x.time !== undefined) nm.appendChild(el('small', '', "الوقت: " + fmtTime(x.time)));
+    row.appendChild(nm);
+    const tr = el('div', 'bar-track');
+    const f = el('div', 'bar-fill ' + (x.p >= 75 ? 'good' : x.p >= 50 ? 'mid' : 'bad'));
+    f.style.width = Math.max(x.p, 2) + '%';
+    tr.appendChild(f); row.appendChild(tr);
+    row.appendChild(el('div', '', `${x.correct} من ${x.total} (${x.p}%)`));
+    bars.appendChild(row);
+  });
+  body.appendChild(bars);
+
+  const an = el('div', 'info');
+  addLine(an, "المرحلة المناسبة", a.stage);
+  if(a.cefr) addLine(an, "المستوى التقريبي (CEFR)", a.cefr);
+  if(a.strong.length) addLine(an, "نقاط القوة", a.strong.join('، '));
+  if(a.weak.length) addLine(an, "نقاط الضعف", a.weak.join('، '));
+  body.appendChild(an);
+  if(a.stageWarn) body.appendChild(el('div', 'warn-box', "⚠️ " + a.stageWarn));
+  if(a.danger.length)
+    body.appendChild(el('div', 'warn-box', "⚠️ تنبيه: ضعف شديد في " + a.danger.join('، ') + (r.percent >= 70 ? "، رغم أن المجموع مقبول." : ".")));
+
   renderBehavior(body, r);
 
-  const table = document.createElement('table');
-  const head = document.createElement('tr');
-  ["القسم","الصحيح","النسبة"].forEach(h => { const th = document.createElement('th'); th.textContent = h; head.appendChild(th); });
-  table.appendChild(head);
-  a.rows.forEach(x => {
-    const tr = document.createElement('tr');
-    [x.name, x.correct + " من " + x.total, x.p + "%"].forEach(v => { const td = document.createElement('td'); td.textContent = v; tr.appendChild(td); });
-    if(x.p < 50) tr.style.color = '#c0392b';
-    table.appendChild(tr);
-  });
-  body.appendChild(table);
-
-  if(a.strong.length) addLine(body, "نقاط القوة", a.strong.join('، '));
-  if(a.weak.length) addLine(body, "نقاط الضعف", a.weak.join('، '));
-  if(a.danger.length){
-    const w = document.createElement('div'); w.className = 'warn-box';
-    w.textContent = "⚠️ تنبيه: ضعف شديد في " + a.danger.join('، ') + (r.percent >= 70 ? "، رغم أن المجموع مقبول." : ".");
-    body.appendChild(w);
+  // السؤال الكتابي
+  if(r.essayPrompt){
+    sub("السؤال الكتابي" + (typeof r.essayScore === 'number' ? ` — العلامة: ${r.essayScore} من 10` : " — لم يُصحَّح بعد"));
+    const pr = el('p', '', r.essayPrompt); pr.dir = 'auto'; pr.style.fontWeight = 'bold'; pr.style.marginTop = '6px';
+    body.appendChild(pr);
+    const tx = el('div', 'essay-text', r.essayText || "(لم يكتب المتقدم شيئًا)"); tx.dir = 'auto';
+    body.appendChild(tx);
+    body.appendChild(el('p', 'note', `عدد الكلمات: ${r.essayWords || 0} — الوقت: ${fmtTime(r.essayTime || 0)}`));
+    const ed = el('div', 'edit-box no-print');
+    ed.appendChild(el('label', '', "علامة السؤال الكتابي من 10 (يضعها مشرف المادة)"));
+    const sel = document.createElement('select'); sel.id = 'essayScoreSel';
+    sel.appendChild(new Option("— اختر العلامة —", ""));
+    for(let i = 10; i >= 0; i--) sel.appendChild(new Option(String(i), String(i)));
+    sel.value = typeof r.essayScore === 'number' ? String(r.essayScore) : "";
+    ed.appendChild(sel);
+    const b = el('button', 'btn light', "حفظ علامة الكتابة");
+    b.onclick = () => { const v = sel.value; updateResult(idx, { essayScore: v === "" ? undefined : +v }); };
+    ed.appendChild(b);
+    body.appendChild(ed);
   }
 
+  // تقييم المقابلة الشخصية
+  sub("تقييم المقابلة الشخصية" + (a.iv !== null ? ` — ${a.iv} من ${INTERVIEW.length * 5}` : " — لم تُجرَ بعد"));
+  if(a.iv !== null){
+    const t = document.createElement('table');
+    const hr = document.createElement('tr');
+    ["المعيار", "العلامة من 5"].forEach(x => hr.appendChild(el('th', '', x)));
+    t.appendChild(hr);
+    INTERVIEW.forEach(([k, n]) => {
+      const tr = document.createElement('tr');
+      tr.appendChild(el('td', '', n));
+      tr.appendChild(el('td', '', r.interview && r.interview[k] ? String(r.interview[k]) : "—"));
+      t.appendChild(tr);
+    });
+    body.appendChild(t);
+    if(r.interviewNotes){ const nt = el('div', 'apology', "ملاحظات المقابلة: " + r.interviewNotes); body.appendChild(nt); }
+  }
+  const iv = el('div', 'edit-box no-print');
+  const grid = el('div', 'iv-grid');
+  const ivSel = {};
+  INTERVIEW.forEach(([k, n]) => {
+    grid.appendChild(el('span', '', n));
+    const s = document.createElement('select');
+    s.appendChild(new Option("—", ""));
+    [5,4,3,2,1].forEach(v => s.appendChild(new Option(v + (v === 5 ? " ممتاز" : v === 4 ? " جيد جدًا" : v === 3 ? " جيد" : v === 2 ? " مقبول" : " ضعيف"), String(v))));
+    s.value = r.interview && r.interview[k] ? String(r.interview[k]) : "";
+    ivSel[k] = s; grid.appendChild(s);
+  });
+  iv.appendChild(grid);
+  iv.appendChild(el('label', '', "ملاحظات المقابلة"));
+  const notes = document.createElement('textarea'); notes.rows = 3; notes.value = r.interviewNotes || "";
+  iv.appendChild(notes);
+  const ib = el('button', 'btn light', "حفظ تقييم المقابلة");
+  ib.onclick = () => {
+    const vals = {}; let any = false;
+    INTERVIEW.forEach(([k]) => { if(ivSel[k].value){ vals[k] = +ivSel[k].value; any = true; } });
+    if(any && Object.keys(vals).length < INTERVIEW.length){ alert("يرجى تقييم جميع معايير المقابلة"); return; }
+    updateResult(idx, { interview: any ? vals : undefined, interviewNotes: notes.value.trim() });
+  };
+  iv.appendChild(ib);
+  body.appendChild(iv);
+
+  // النتيجة النهائية
+  const fb = el('div', 'final-box');
+  if(a.final !== null){
+    fb.appendChild(el('span', '', "النتيجة النهائية"));
+    fb.appendChild(el('b', '', a.final + "%"));
+    fb.appendChild(el('span', '', a.parts.map(x => `${x.name} ${x.v}% (وزن ${x.w}%)`).join(' + ')));
+  } else {
+    fb.appendChild(el('span', '', "النتيجة النهائية"));
+    fb.appendChild(el('b', '', r.percent + "%"));
+    fb.appendChild(el('span', '', `تُحسب عند إضافة علامة الكتابة أو المقابلة: الاختبار ${WEIGHTS.test}% + الكتابة ${WEIGHTS.essay}% + المقابلة ${WEIGHTS.interview}%`));
+  }
+  body.appendChild(fb);
+
+  // تفاصيل الأخطاء
   if(r.wrong && r.wrong.length){
     const d = document.createElement('details');
-    const sm = document.createElement('summary');
-    sm.textContent = `تفاصيل الأخطاء (${r.wrong.length} سؤالًا) — اضغط للعرض`;
-    d.appendChild(sm);
+    d.appendChild(el('summary', '', `تفاصيل الأخطاء (${r.wrong.length} سؤالًا) — اضغط للعرض`));
     Object.keys(sections).forEach(k => {
       const items = r.wrong.filter(w => w.s === k);
       if(!items.length) return;
-      const h = document.createElement('div'); h.className = 'wsec';
-      h.textContent = sections[k] + " (" + items.length + ")";
-      d.appendChild(h);
+      d.appendChild(el('div', 'wsec', sections[k] + " (" + items.length + ")"));
       items.forEach((w, n) => {
-        const row = document.createElement('div'); row.className = 'wq';
-        const qd = document.createElement('div'); qd.textContent = (n + 1) + ". " + w.q;
-        qd.style.whiteSpace = 'pre-line'; qd.dir = 'auto';
-        const yd = document.createElement('div'); yd.className = 'yours';
-        yd.textContent = "إجابته: " + (w.your === null ? "لم يُجب" : w.your);
-        const rd = document.createElement('div'); rd.className = 'right';
-        rd.textContent = "الصحيح: " + w.right;
-        row.appendChild(qd); row.appendChild(yd); row.appendChild(rd);
+        const row = el('div', 'wq');
+        const qd = el('div', '', (n + 1) + ". " + w.q); qd.style.whiteSpace = 'pre-line'; qd.dir = 'auto';
+        row.appendChild(qd);
+        row.appendChild(el('div', 'yours', "إجابته: " + (w.your === null ? "لم يُجب" : w.your)));
+        row.appendChild(el('div', 'right', "الصحيح: " + w.right));
         d.appendChild(row);
       });
     });
     body.appendChild(d);
   }
 
-  const rec = document.createElement('div');
-  rec.className = 'rec ' + a.cls;
-  rec.textContent = "التوصية: " + a.rec;
-  body.appendChild(rec);
+  body.appendChild(el('div', 'rec ' + a.cls, `التقدير: ${a.level} — التوصية: ${a.rec}`));
 
   const apBtn = document.getElementById('apologyBtn');
-  if(a.cls === 'bad'){
-    const h = document.createElement('p'); h.style.fontWeight = 'bold'; h.style.marginTop = '12px';
-    h.textContent = "رسالة الاعتذار للمتقدم:";
-    body.appendChild(h);
-    const ap = document.createElement('div'); ap.className = 'apology';
-    ap.textContent = apologyText(r, a);
-    body.appendChild(ap);
+  if(!a.recommended){
+    const hp = el('p', 'no-print', "رسالة الاعتذار للمتقدم:"); hp.style.fontWeight = 'bold'; hp.style.marginTop = '12px';
+    body.appendChild(hp);
+    body.appendChild(el('div', 'apology no-print', apologyText(r, a)));
     apBtn.style.display = 'block';
-  } else {
-    apBtn.style.display = 'none';
-  }
+  } else apBtn.style.display = 'none';
+
+  // التواقيع
+  const signs = el('div', 'signs');
+  signs.appendChild(el('div', '', "مشرف المادة\nالاسم والتوقيع"));
+  signs.appendChild(el('div', '', "مدير/ة المدرسة\n" + (info0.principal || "الاسم") + "\nالتوقيع"));
+  signs.appendChild(el('div', '', "ختم المدرسة"));
+  signs.querySelectorAll('div').forEach(x => x.style.whiteSpace = 'pre-line');
+  body.appendChild(signs);
+  const ft = el('p', 'note', "صدر هذا التقرير من تطبيق «اختبار كفاءة المعلمين» — dahshansoft.com");
+  ft.style.textAlign = 'center'; ft.style.marginTop = '14px';
+  body.appendChild(ft);
+
+  document.getElementById('deleteBtn').style.display = isAdmin() ? 'block' : 'none';
   show('reportScreen');
 }
 
@@ -1746,8 +2152,500 @@ function fmtTime(sec){
 }
 
 function printReport(){
-  document.querySelectorAll('#reportBody details').forEach(d => d.open = true);
   window.print();
+}
+
+// =====================================================================
+// ===== الميزات الاحترافية: بيانات المدرسة، السجل، المقارنة، الإحصاءات،
+// ===== السؤال الكتابي، المقابلة، النتيجة النهائية، التثبيت على الجهاز
+// =====================================================================
+const ESSAY_MINUTES = 10;                 // مدة السؤال الكتابي
+const RETEST_DAYS = 180;                  // لا يُعاد الاختبار قبل 6 أشهر إلا بموافقة المشرف
+const WEIGHTS = { test: 70, essay: 10, interview: 20 };   // أوزان النتيجة النهائية
+const STAGES = { 1: "المرحلة الأساسية الدنيا", 2: "المرحلة الأساسية العليا", 3: "المرحلة الثانوية" };
+const INTERVIEW = [
+  ["personality", "الشخصية والحضور"],
+  ["fluency", "الطلاقة وسلامة اللغة"],
+  ["appearance", "المظهر واللباقة"],
+  ["confidence", "الثقة بالنفس"],
+  ["classroom", "القدرة على إدارة الصف"]
+];
+const ESSAY_PROMPTS = {
+  "اللغة العربية": [
+    "اكتب فقرة من 80 إلى 120 كلمة عن دور المعلم في بناء شخصية الطالب، مراعيًا سلامة اللغة وعلامات الترقيم.",
+    "اكتب فقرة من 80 إلى 120 كلمة تبيّن فيها كيف تحبّب طلابك في قراءة الكتب، مراعيًا سلامة اللغة وعلامات الترقيم.",
+    "اكتب فقرة من 80 إلى 120 كلمة عن أثر التكنولوجيا في تعليم اللغة العربية، مراعيًا سلامة اللغة وعلامات الترقيم.",
+    "اكتب فقرة من 80 إلى 120 كلمة تصف فيها حصة نموذجية تتمنى أن تقدّمها لطلابك، مراعيًا سلامة اللغة وعلامات الترقيم.",
+    "اكتب فقرة من 80 إلى 120 كلمة عن أهمية اللغة العربية في الحفاظ على هوية الأمة، مراعيًا سلامة اللغة وعلامات الترقيم."
+  ],
+  "اللغة الإنجليزية": [
+    "Write a paragraph of 80–120 words about the qualities of a successful English teacher.",
+    "Write a paragraph of 80–120 words explaining how you would motivate students who dislike reading in English.",
+    "Write a paragraph of 80–120 words about the role of technology in learning a foreign language.",
+    "Write a paragraph of 80–120 words describing a memorable lesson you taught or attended, and why it was effective.",
+    "Write a paragraph of 80–120 words about how you would teach a class of students with mixed abilities."
+  ]
+};
+
+let phase = 'mc', essayLeft = 0;          // مرحلة الاختبار: اختيار من متعدد ثم السؤال الكتابي
+let role = null;                          // { type:'admin' } أو { type:'sup', subject }
+let compareSel = new Set();
+
+// ===== أدوات عامة =====
+function toLatin(s){ return String(s || "").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)); }
+function wordCount(t){ return (String(t || "").trim().match(/\S+/g) || []).length; }
+function makeRef(){
+  const d = new Date();
+  const c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let s = ""; for(let i = 0; i < 4; i++) s += c[Math.floor(Math.random() * c.length)];
+  return "TT-" + String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + "-" + s;
+}
+function saveResults(list){
+  try { localStorage.setItem('teacherResults', JSON.stringify(list)); return true; }
+  catch(e){ alert("⚠️ تعذّر الحفظ: ذاكرة المتصفح ممتلئة. احفظ نسخة احتياطية واحذف التقارير القديمة."); return false; }
+}
+function askGuarded(msg){
+  guardActive = false;              // نافذة التأكيد لا تُحسب خروجًا من الاختبار
+  const ok = confirm(msg);
+  guardActive = true;
+  lastLeave = Date.now();
+  if(!ok) enterFullscreen();
+  return ok;
+}
+function interviewTotal(r){
+  if(!r.interview) return null;
+  const v = INTERVIEW.map(([k]) => +r.interview[k] || 0);
+  return v.some(x => x) ? v.reduce((a, b) => a + b, 0) : null;
+}
+function shortDate(r){
+  if(r.ts) return new Date(r.ts).toLocaleDateString('ar-JO');
+  return String(r.date || "").split('،')[0];
+}
+function saveFile(blob, fileName, title){
+  try {
+    const file = new File([blob], fileName, { type: blob.type });
+    if(navigator.canShare && navigator.canShare({ files: [file] })){
+      return navigator.share({ files: [file], title }).then(() => true).catch(() => false);
+    }
+  } catch(e){}
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = fileName;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  return Promise.resolve(true);
+}
+
+// ===== إعدادات المدرسة =====
+function schoolInfo(){ return lsJSON('ttSchool') || {}; }
+function saveSchoolInfo(patch){
+  const o = Object.assign(schoolInfo(), patch);
+  try { localStorage.setItem('ttSchool', JSON.stringify(o)); return true; }
+  catch(e){ return false; }
+}
+function schoolName(){
+  const st = licenseState();
+  return st.status === 'active' ? st.school : (schoolInfo().name || "");
+}
+function passMark(){ const v = +schoolInfo().passMark; return v >= 50 && v <= 85 ? v : 65; }
+function essayOn(){ return schoolInfo().essay !== false; }
+function supCodes(){ return schoolInfo().supCodes || {}; }
+function isAdmin(){ return !!role && role.type === 'admin'; }
+
+function renderSchoolSettings(){
+  const s = schoolInfo();
+  const st = licenseState();
+  const sn = document.getElementById('setSchool');
+  sn.value = st.status === 'active' ? st.school : (s.name || "");
+  sn.disabled = st.status === 'active';
+  sn.title = st.status === 'active' ? "اسم المدرسة مأخوذ من الترخيص" : "";
+  document.getElementById('setPrincipal').value = s.principal || "";
+  document.getElementById('setPass').value = passMark();
+  document.getElementById('setEssay').checked = essayOn();
+  const img = document.getElementById('logoPreview');
+  if(s.logo){ img.src = s.logo; img.classList.remove('hidden'); document.getElementById('logoRemove').style.display = ''; }
+  else { img.classList.add('hidden'); document.getElementById('logoRemove').style.display = 'none'; }
+  const c = supCodes();
+  document.getElementById('supAr').value = c["اللغة العربية"] || "";
+  document.getElementById('supEn').value = c["اللغة الإنجليزية"] || "";
+  document.getElementById('schoolMsg').textContent = "";
+  document.getElementById('supCodesMsg').textContent = "";
+}
+function saveSchoolSettings(){
+  const msg = document.getElementById('schoolMsg');
+  const pm = +toLatin(document.getElementById('setPass').value);
+  if(!(pm >= 50 && pm <= 85)){ msg.classList.remove('ok'); msg.textContent = "علامة النجاح يجب أن تكون بين 50 و85"; return; }
+  const patch = {
+    principal: document.getElementById('setPrincipal').value.trim(),
+    passMark: Math.round(pm),
+    essay: document.getElementById('setEssay').checked
+  };
+  if(licenseState().status !== 'active') patch.name = document.getElementById('setSchool').value.trim();
+  saveSchoolInfo(patch);
+  updateTestInfo();
+  msg.classList.add('ok');
+  msg.textContent = "تم حفظ بيانات المدرسة ✔";
+}
+function loadLogo(input){
+  const f = input.files && input.files[0];
+  input.value = "";
+  if(!f) return;
+  const msg = document.getElementById('schoolMsg');
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const max = 240, k = Math.min(1, max / Math.max(img.width, img.height));
+      const cv = document.createElement('canvas');
+      cv.width = Math.round(img.width * k); cv.height = Math.round(img.height * k);
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+      const data = cv.toDataURL('image/png');
+      if(!saveSchoolInfo({ logo: data })){ msg.textContent = "❌ الصورة كبيرة جدًا"; return; }
+      const pv = document.getElementById('logoPreview');
+      pv.src = data; pv.classList.remove('hidden');
+      document.getElementById('logoRemove').style.display = '';
+      msg.classList.add('ok'); msg.textContent = "تم حفظ الشعار ✔";
+    };
+    img.onerror = () => { msg.classList.remove('ok'); msg.textContent = "❌ تعذّرت قراءة الصورة"; };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(f);
+}
+function removeLogo(){
+  saveSchoolInfo({ logo: "" });
+  document.getElementById('logoPreview').classList.add('hidden');
+  document.getElementById('logoRemove').style.display = 'none';
+}
+function saveSupCodes(){
+  const msg = document.getElementById('supCodesMsg');
+  const ar = document.getElementById('supAr').value.trim();
+  const en = document.getElementById('supEn').value.trim();
+  msg.classList.remove('ok');
+  for(const v of [ar, en]){
+    if(v && v.length < 4){ msg.textContent = "كلمة سر المشرف يجب أن تكون 4 أحرف على الأقل"; return; }
+    if(v && v === getPass()){ msg.textContent = "كلمة سر المشرف يجب أن تختلف عن كلمة سر الإدارة"; return; }
+  }
+  if(ar && ar === en){ msg.textContent = "اجعل كلمة سر مشرف العربية مختلفة عن مشرف الإنجليزية"; return; }
+  const c = {};
+  if(ar) c["اللغة العربية"] = ar;
+  if(en) c["اللغة الإنجليزية"] = en;
+  saveSchoolInfo({ supCodes: c });
+  msg.classList.add('ok');
+  msg.textContent = "تم حفظ كلمات سر المشرفين ✔";
+}
+
+// ===== لوحة الإدارة: التبويبات =====
+function openTab(id){
+  if(id === 'tabSettings' && !isAdmin()) id = 'tabApplicants';
+  document.querySelectorAll('#adminScreen .tab-pane').forEach(p => p.classList.toggle('hidden', p.id !== id));
+  document.querySelectorAll('#adminScreen .tab').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  if(id === 'tabStats') renderStats();
+}
+function backToAdmin(){ renderAdmin(); show('adminScreen'); }
+function logout(){ role = null; compareSel = new Set(); backHome(); }
+
+// ===== سجل المتقدمين =====
+function roleResults(){
+  return loadResults().map((r, idx) => ({ r, idx, a: analyze(r) }))
+    .filter(x => isAdmin() || x.r.subject === role.subject);
+}
+function visibleResults(){
+  const q = toLatin(document.getElementById('fSearch').value.trim()).toLowerCase();
+  const subj = document.getElementById('fSubject').value;
+  const rec = document.getElementById('fRec').value;
+  const per = document.getElementById('fPeriod').value;
+  const sort = document.getElementById('fSort').value;
+  let from = 0;
+  if(per === '30') from = Date.now() - 30 * 86400000;
+  else if(per === '90') from = Date.now() - 90 * 86400000;
+  else if(per === 'year') from = new Date(new Date().getFullYear(), 0, 1).getTime();
+  let list = roleResults().filter(({ r, a }) => {
+    if(subj && r.subject !== subj) return false;
+    if(rec === 'yes' && !a.recommended) return false;
+    if(rec === 'no' && a.recommended) return false;
+    if(from && (!r.ts || r.ts < from)) return false;
+    if(q){
+      const hay = [r.name, r.phone, r.nid, r.id].map(x => String(x || "").toLowerCase()).join(' ');
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  if(sort === 'score') list.sort((x, y) => y.r.percent - x.r.percent);
+  else if(sort === 'final') list.sort((x, y) => (y.a.final ?? y.r.percent) - (x.a.final ?? x.r.percent));
+  else list.sort((x, y) => (y.r.ts || 0) - (x.r.ts || 0) || y.idx - x.idx);
+  return list;
+}
+function renderLog(){
+  const list = visibleResults();
+  const total = roleResults().length;
+  const box = document.getElementById('adminList');
+  const sort = document.getElementById('fSort').value;
+  document.getElementById('logCount').textContent = total
+    ? `عدد المتقدمين: ${list.length}` + (list.length !== total ? ` من أصل ${total}` : "") + ` — الموصى بتعيينهم: ${list.filter(x => x.a.recommended).length}`
+    : "لا يوجد متقدمون بعد.";
+  box.innerHTML = "";
+  if(list.length){
+    const wrap = document.createElement('div'); wrap.className = 'table-wrap';
+    const table = document.createElement('table');
+    const head = document.createElement('tr');
+    ["✔", sort === 'new' ? "م" : "الترتيب", "الاسم", "المادة", "الاختبار", "التقدير", "النهائية", "التاريخ", ""].forEach(h => {
+      const th = document.createElement('th'); th.textContent = h; head.appendChild(th);
+    });
+    table.appendChild(head);
+    list.forEach((x, n) => {
+      const { r, a, idx } = x;
+      const tr = document.createElement('tr'); tr.className = 'r-' + a.cls;
+      const tdc = document.createElement('td');
+      const cb = document.createElement('input'); cb.type = 'checkbox';
+      cb.checked = compareSel.has(r.id || idx);
+      cb.onchange = () => {
+        const key = r.id || idx;
+        if(cb.checked){
+          if(compareSel.size >= 3){ cb.checked = false; alert("يمكن مقارنة 3 متقدمين كحد أقصى"); return; }
+          compareSel.add(key);
+        } else compareSel.delete(key);
+        updateCompareBtn();
+      };
+      tdc.appendChild(cb); tr.appendChild(tdc);
+      const rank = sort === 'new' ? String(n + 1) : (n < 3 ? ["🥇","🥈","🥉"][n] : String(n + 1));
+      [rank, r.name + (r.leaves >= 3 ? " ⚠️" : ""), r.subject.replace("اللغة ", ""), r.percent + "%", a.level,
+       a.final !== null ? a.final + "%" : "—", shortDate(r)].forEach(v => {
+        const td = document.createElement('td'); td.textContent = v; tr.appendChild(td);
+      });
+      const td = document.createElement('td');
+      const b = document.createElement('button');
+      b.className = 'view-btn'; b.textContent = 'التقرير';
+      b.onclick = () => openReport(idx);
+      td.appendChild(b); tr.appendChild(td);
+      table.appendChild(tr);
+    });
+    wrap.appendChild(table);
+    box.appendChild(wrap);
+  }
+  updateCompareBtn();
+}
+function updateCompareBtn(){
+  const b = document.getElementById('compareBtn');
+  const n = compareSel.size;
+  b.disabled = n < 2;
+  b.textContent = n ? `مقارنة المحددين (${n})` : "مقارنة المحددين";
+}
+
+// ===== التصدير إلى Excel =====
+function exportExcel(){
+  const list = visibleResults();
+  if(!list.length){ alert("لا يوجد متقدمون في القائمة لتصديرهم"); return; }
+  const secKeys = Object.keys(sections).filter(k => list.some(x => x.r.scores && x.r.scores[k]));
+  const cols = ["الرقم المرجعي","الاسم","الرقم الوطني","الهاتف","المادة","المرحلة المتقدَّم لها","المؤهل","التقدير الجامعي","الجامعة","سنة التخرج","الخبرة","تاريخ الاختبار","النموذج"]
+    .concat(secKeys.map(k => sections[k] + " %"))
+    .concat(["نتيجة الاختبار %","المرحلة المناسبة","المستوى CEFR","الكتابة /10","المقابلة /25","النتيجة النهائية %","التقدير","التوصية","مرات الخروج من الاختبار","إعادة اختبار"]);
+  const esc = v => { v = v === undefined || v === null ? "" : String(v); return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+  const lines = [cols.map(esc).join(',')];
+  list.forEach(({ r, a }) => {
+    const row = [r.id, r.name, r.nid, r.phone ? "'" + r.phone : "", r.subject, STAGES[r.stageApplied] || "", r.degree, r.gpa, r.university, r.gradYear, r.experience, r.date, r.form]
+      .concat(secKeys.map(k => { const x = a.rows.find(y => y.key === k); return x ? x.p : ""; }))
+      .concat([r.percent, a.stage, a.cefr, typeof r.essayScore === 'number' ? r.essayScore : "", a.iv !== null ? a.iv : "",
+               a.final !== null ? a.final : "", a.level, a.rec, r.leaves !== undefined ? r.leaves : "", r.retestOf || ""]);
+    lines.push(row.map(esc).join(','));
+  });
+  const blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+  const d = new Date();
+  const stamp = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, '0') + "-" + String(d.getDate()).padStart(2, '0');
+  saveFile(blob, `قائمة-المتقدمين-${stamp}.csv`, "قائمة المتقدمين — اختبار كفاءة المعلمين");
+}
+
+// ===== المقارنة بين المتقدمين =====
+function openCompare(){
+  const all = loadResults();
+  const items = all.map((r, idx) => ({ r, idx })).filter(x => compareSel.has(x.r.id || x.idx)).map(x => ({ ...x, a: analyze(x.r) }));
+  if(items.length < 2){ alert("حدد متقدمَين على الأقل"); return; }
+  const body = document.getElementById('compareBody');
+  body.innerHTML = "";
+  const h = document.createElement('h2'); h.textContent = "مقارنة بين المتقدمين"; body.appendChild(h);
+  if(new Set(items.map(x => x.r.subject)).size > 1){
+    const w = document.createElement('div'); w.className = 'warn-box';
+    w.textContent = "⚠️ المتقدمون من مادتين مختلفتين — المقارنة في الأقسام غير ممكنة، وتُقارن النتائج العامة فقط.";
+    body.appendChild(w);
+  }
+  const secKeys = Object.keys(sections).filter(k => items.every(x => x.r.scores && x.r.scores[k]));
+  const rows = [
+    ["المادة", x => x.r.subject.replace("اللغة ", "")],
+    ["المرحلة المتقدَّم لها", x => STAGES[x.r.stageApplied] || "—"],
+    ["المؤهل", x => x.r.degree + (x.r.gpa ? " — " + x.r.gpa : "")],
+    ["الخبرة", x => x.r.experience],
+    ...secKeys.map(k => [sections[k], x => { const s = x.a.rows.find(y => y.key === k); return s ? s.p : null; }, "%"]),
+    ["نتيجة الاختبار", x => x.r.percent, "%"],
+    ["السؤال الكتابي /10", x => typeof x.r.essayScore === 'number' ? x.r.essayScore : null, ""],
+    ["المقابلة /25", x => x.a.iv, ""],
+    ["النتيجة النهائية", x => x.a.final, "%"],
+    ["المرحلة المناسبة", x => x.a.stage],
+    ["مرات الخروج من الاختبار", x => x.r.leaves !== undefined ? x.r.leaves : "—"],
+    ["التقدير", x => x.a.level],
+    ["التوصية", x => x.a.rec]
+  ];
+  const wrap = document.createElement('div'); wrap.className = 'table-wrap';
+  const table = document.createElement('table');
+  const hr = document.createElement('tr');
+  const th0 = document.createElement('th'); th0.textContent = "البند"; hr.appendChild(th0);
+  items.forEach(x => { const th = document.createElement('th'); th.textContent = x.r.name; hr.appendChild(th); });
+  table.appendChild(hr);
+  rows.forEach(([label, fn, unit]) => {
+    const tr = document.createElement('tr');
+    const td0 = document.createElement('td'); td0.textContent = label; td0.style.fontWeight = 'bold'; tr.appendChild(td0);
+    const vals = items.map(fn);
+    const numeric = unit !== undefined;
+    const nums = vals.filter(v => typeof v === 'number');
+    const best = numeric && nums.length > 1 ? Math.max(...nums) : null;
+    vals.forEach(v => {
+      const td = document.createElement('td');
+      td.textContent = v === null || v === undefined ? "—" : (typeof v === 'number' ? v + (unit || "") : v);
+      if(best !== null && v === best && nums.filter(n => n === best).length < nums.length) td.className = 'best';
+      tr.appendChild(td);
+    });
+    table.appendChild(tr);
+  });
+  wrap.appendChild(table);
+  body.appendChild(wrap);
+  // الأفضل حسب النتيجة النهائية (أو نتيجة الاختبار)
+  const score = x => x.a.final !== null ? x.a.final : x.r.percent;
+  const top = items.slice().sort((p, q) => score(q) - score(p))[0];
+  const rec = document.createElement('div'); rec.className = 'rec good';
+  rec.textContent = `الأعلى نتيجة: ${top.r.name} (${score(top)}%)`;
+  body.appendChild(rec);
+  const p = document.createElement('p'); p.className = 'note';
+  p.textContent = "الخانات الخضراء = الأعلى في كل بند.";
+  body.appendChild(p);
+  show('compareScreen');
+}
+
+// ===== الإحصاءات =====
+function renderStats(){
+  const box = document.getElementById('statsBody');
+  if(!box) return;
+  const list = roleResults();
+  box.innerHTML = "";
+  if(!list.length){ box.textContent = "لا توجد بيانات بعد — تظهر الإحصاءات بعد اختبار أول متقدم."; return; }
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if(cls) e.className = cls; if(text !== undefined) e.textContent = text; return e; };
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+  const avg = arr => arr.length ? Math.round(arr.reduce((a, b) => a + b, 0) / arr.length) : 0;
+  const recN = list.filter(x => x.a.recommended).length;
+  const grid = el('div', 'stat-grid');
+  const stat = (v, l) => { const d = el('div', 'stat'); d.appendChild(el('b', '', v)); d.appendChild(el('span', '', l)); grid.appendChild(d); };
+  stat(list.length, "إجمالي المتقدمين");
+  stat(list.filter(x => x.r.ts && x.r.ts >= monthStart).length, "هذا الشهر");
+  stat(avg(list.map(x => x.r.percent)) + "%", "متوسط النتائج");
+  stat(Math.round(recN / list.length * 100) + "%", "نسبة الموصى بتعيينهم");
+  box.appendChild(grid);
+
+  Object.keys(SUBJECTS).forEach(sub => {
+    const sl = list.filter(x => x.r.subject === sub);
+    if(!sl.length) return;
+    box.appendChild(el('div', 'sub-h', `${sub} — ${sl.length} متقدمًا، المتوسط ${avg(sl.map(x => x.r.percent))}%`));
+    const bars = el('div', 'bars');
+    const secAvg = SUBJECTS[sub].map(k => {
+      const ps = sl.map(x => x.a.rows.find(y => y.key === k)).filter(Boolean).map(y => y.p);
+      return { k, n: ps.length, p: avg(ps) };
+    }).filter(x => x.n);
+    secAvg.forEach(x => {
+      const row = el('div', 'bar-row');
+      row.appendChild(el('div', '', sections[x.k]));
+      const tr = el('div', 'bar-track');
+      const f = el('div', 'bar-fill ' + (x.p >= 75 ? 'good' : x.p >= 50 ? 'mid' : 'bad'));
+      f.style.width = Math.max(x.p, 2) + '%';
+      tr.appendChild(f); row.appendChild(tr);
+      row.appendChild(el('div', '', `${x.p}% (${x.n})`));
+      bars.appendChild(row);
+    });
+    box.appendChild(bars);
+    if(secAvg.length > 1){
+      const weakest = secAvg.slice().sort((p, q) => p.p - q.p)[0];
+      box.appendChild(el('p', 'note', `أضعف قسم عند المتقدمين: ${sections[weakest.k]} (${weakest.p}%) — مؤشر مفيد لخطط تدريب المعلمين الجدد.`));
+    }
+    const best = sl.slice().sort((p, q) => (q.a.final ?? q.r.percent) - (p.a.final ?? p.r.percent))[0];
+    box.appendChild(el('p', 'note', `أعلى متقدم: ${best.r.name} (${best.a.final ?? best.r.percent}%) — الموصى بتعيينهم: ${sl.filter(x => x.a.recommended).length}`));
+  });
+  const flagged = list.filter(x => x.r.leaves >= 3).length;
+  if(flagged) box.appendChild(el('div', 'warn-box', `⚠️ ${flagged} اختبار/ات فيها خروج متكرر من شاشة الاختبار (3 مرات أو أكثر).`));
+}
+
+// ===== تعديل التقرير وحذفه =====
+function updateResult(idx, patch){
+  const all = loadResults();
+  if(!all[idx]) return;
+  Object.keys(patch).forEach(k => { if(patch[k] === undefined) delete all[idx][k]; else all[idx][k] = patch[k]; });
+  if(saveResults(all)) openReport(idx);
+}
+function deleteReport(){
+  if(!currentReport || !isAdmin()) return;
+  if(!confirm(`هل تريد حذف تقرير «${currentReport.r.name}» نهائيًا؟\nلا يمكن التراجع إلا من نسخة احتياطية.`)) return;
+  const all = loadResults();
+  all.splice(currentReport.idx, 1);
+  saveResults(all);
+  compareSel = new Set();
+  currentReport = null;
+  backToAdmin();
+}
+
+// ===== السؤال الكتابي =====
+function goEssay(){
+  phase = 'essay';
+  if(!candidate.essayPrompt){
+    const list = ESSAY_PROMPTS[candidate.subject] || ESSAY_PROMPTS["اللغة العربية"];
+    candidate.essayPrompt = list[Math.floor(Math.random() * list.length)];
+  }
+  if(essayLeft <= 0) essayLeft = ESSAY_MINUTES * 60;
+  const en = candidate.subject === "اللغة الإنجليزية";
+  const pr = document.getElementById('essayPrompt');
+  pr.textContent = candidate.essayPrompt;
+  pr.dir = en ? 'ltr' : 'rtl';
+  pr.classList.toggle('ltr', en);
+  const ta = document.getElementById('essayText');
+  ta.dir = en ? 'ltr' : 'rtl';
+  ta.placeholder = en ? "Write your paragraph here..." : "اكتب فقرتك هنا...";
+  ta.value = candidate.essayText || "";
+  document.getElementById('essayErr').textContent = "";
+  onEssayInput(true);
+  show('essayScreen');
+  updateTimer();
+  saveProgress();
+}
+function onEssayInput(silent){
+  const t = document.getElementById('essayText').value;
+  candidate.essayText = t;
+  document.getElementById('essayCount').textContent = "عدد الكلمات: " + wordCount(t);
+  if(silent !== true) saveProgress();
+}
+function submitEssay(){
+  const n = wordCount(document.getElementById('essayText').value);
+  const msg = n < 40
+    ? `كتبت ${n} كلمة فقط، والمطلوب 80 كلمة تقريبًا.\nهل تريد تسليم الاختبار الآن؟`
+    : "هل أنت متأكد من تسليم الاختبار؟";
+  if(askGuarded(msg)) finishTest();
+}
+
+// ===== سنوات التخرج =====
+(function fillYears(){
+  const s = document.getElementById('gradYear');
+  if(!s) return;
+  for(let y = new Date().getFullYear(); y >= 1975; y--) s.appendChild(new Option(String(y), String(y)));
+})();
+
+// ===== التثبيت على الجهاز والعمل بدون إنترنت =====
+let installEvt = null;
+if('serviceWorker' in navigator && location.protocol === 'https:'){
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  installEvt = e;
+  document.getElementById('installBtn').classList.remove('hidden');
+});
+window.addEventListener('appinstalled', () => document.getElementById('installBtn').classList.add('hidden'));
+function installApp(){
+  if(!installEvt){ alert("لتثبيت التطبيق: افتح قائمة المتصفح ثم اختر «إضافة إلى الشاشة الرئيسية»."); return; }
+  installEvt.prompt();
+  installEvt.userChoice.finally(() => { installEvt = null; document.getElementById('installBtn').classList.add('hidden'); });
 }
 
 renderWelcome();
