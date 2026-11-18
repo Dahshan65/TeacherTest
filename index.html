@@ -243,14 +243,14 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
   <div id="activationScreen" class="card hidden">
     <h2>🔑 تفعيل التطبيق</h2>
     <div id="actStatus"></div>
-    <p class="note">لتفعيل التطبيق في مدرستك: اكتب اسم المدرسة، ثم أرسل رمز الجهاز إلى Dahshan Soft عبر واتساب، وستصلك رمز التفعيل.</p>
+    <p class="note">لتفعيل التطبيق في مدرستك: اكتب اسم المدرسة، ثم أرسل رمز الجهاز إلى Dahshan Soft عبر واتساب، ويصلك رمز تفعيل من رقمين.</p>
     <label>رمز الجهاز</label>
     <div class="code-box" id="deviceCode"></div>
     <label>اسم المدرسة</label>
     <input id="schoolName" type="text" placeholder="مثال: مدرسة النور الأساسية">
     <button class="btn wa-btn" onclick="requestActivation()">طلب رمز التفعيل عبر واتساب</button>
     <label>رمز التفعيل</label>
-    <input id="actKey" type="text" dir="ltr" placeholder="XXXXXXXX-XXXXXX" autocomplete="off">
+    <input id="actKey" type="text" dir="ltr" inputmode="numeric" placeholder="00" autocomplete="off" style="text-align:center;font-size:28px;letter-spacing:8px">
     <label>كلمة سر الإدارة الجديدة</label>
     <input id="newPass1" type="password" placeholder="4 أحرف أو أرقام على الأقل">
     <div class="err" id="actErr"></div>
@@ -579,6 +579,34 @@ function keyIsValid(key){
   const p = parseKey(key);
   return !!p && hash8(getDeviceId() + "|" + p.exp + "|" + LICENSE_SECRET) === p.sig;
 }
+// ===== رموز التفعيل من رقمين =====
+const PLANS = { "1": "سنة واحدة", "2": "سنتان", "L": "مدى الحياة" };
+function reqNo(){ return (+(lsGet('ttActN') || 0)) + 1; }
+function tinyCodes(dev, n){
+  const out = {};
+  for(const plan of ["1", "2", "L"]){
+    let k = 0, c;
+    do { c = String(parseInt(hash8(dev + "|T" + plan + "#" + k + "|" + n + "|" + LICENSE_SECRET), 16) % 100).padStart(2, "0"); k++; }
+    while(Object.values(out).includes(c));
+    out[plan] = c;
+  }
+  return out;
+}
+function ymd6(d){ return String(d.getFullYear() % 100).padStart(2,"0") + String(d.getMonth()+1).padStart(2,"0") + String(d.getDate()).padStart(2,"0"); }
+// يحوّل الرمز القصير إلى مفتاح ترخيص كامل داخلي (أو null إن كان خاطئًا)
+function tinyToKey(code){
+  const dev = getDeviceId(), tc = tinyCodes(dev, reqNo());
+  const plan = Object.keys(tc).find(p => tc[p] === code);
+  if(!plan) return null;
+  let exp = "999999";
+  if(plan !== "L"){
+    const st = licenseState();
+    const base = (st.status === 'active' && st.until && st.until > new Date()) ? new Date(st.until) : new Date();
+    base.setFullYear(base.getFullYear() + (+plan));
+    exp = ymd6(base);
+  }
+  return hash8(dev + "|" + exp + "|" + LICENSE_SECRET) + "-" + exp;
+}
 function expDate(exp){
   if(exp === "999999") return null;   // مدى الحياة
   return new Date(2000 + +exp.slice(0,2), +exp.slice(2,4) - 1, +exp.slice(4,6), 23, 59, 59);
@@ -655,21 +683,41 @@ function requestActivation(){
   err.classList.remove('ok');
   if(!school){ err.textContent = "اكتب اسم المدرسة أولًا"; return; }
   err.textContent = "";
-  const msg = `السلام عليكم،\nأرغب بتفعيل تطبيق «اختبار كفاءة المعلمين».\nاسم المدرسة: ${school}\nرمز الجهاز: ${getDeviceId()}`;
+  const msg = `السلام عليكم،\nأرغب بتفعيل تطبيق «اختبار كفاءة المعلمين».\nاسم المدرسة: ${school}\nرمز الجهاز: ${getDeviceId()}\nرقم الطلب: ${reqNo()}`;
   window.open('https://wa.me/' + SELLER_WA + '?text=' + encodeURIComponent(msg), '_blank');
 }
 
 function activate(){
   const school = document.getElementById('schoolName').value.trim();
-  const key = document.getElementById('actKey').value.trim().toUpperCase();
+  let key = document.getElementById('actKey').value.trim().toUpperCase().replace(/\s+/g, "");
   const pass = document.getElementById('newPass1').value;
   const err = document.getElementById('actErr');
   err.classList.remove('ok');
   if(!school){ err.textContent = "اكتب اسم المدرسة"; return; }
-  if(!keyIsValid(key)){ err.textContent = "رمز التفعيل غير صحيح لهذا الجهاز"; return; }
+  if(!key){ err.textContent = "اكتب رمز التفعيل"; return; }
+  if(pass.length < 4){ err.textContent = "اكتب كلمة سر للإدارة من 4 أحرف على الأقل"; return; }
+  // حماية من التخمين: 3 محاولات خاطئة = قفل يتضاعف (نصف ساعة ← حتى 24 ساعة)
+  const lock = +(lsGet('ttActLock') || 0);
+  if(Date.now() < lock){
+    const mn = Math.ceil((lock - Date.now()) / 60000);
+    err.textContent = "محاولات كثيرة خاطئة — حاول بعد " + (mn > 90 ? Math.ceil(mn / 60) + " ساعة" : mn + " دقيقة");
+    return;
+  }
+  const isTiny = /^\d{2}$/.test(key);
+  if(isTiny) key = tinyToKey(key) || "";
+  if(!keyIsValid(key)){
+    const bad = (+(lsGet('ttActBad') || 0)) + 1;
+    if(bad >= 3){
+      const locks = (+(lsGet('ttActLocks') || 0)) + 1;
+      lsSet('ttActLocks', String(locks)); lsSet('ttActBad', "0");
+      lsSet('ttActLock', String(Date.now() + Math.min(30 * 2 ** (locks - 1), 1440) * 60000));
+    } else lsSet('ttActBad', String(bad));
+    err.textContent = "رمز التفعيل غير صحيح لهذا الجهاز"; return;
+  }
   const until = expDate(parseKey(key).exp);
   if(until && until < new Date()){ err.textContent = "رمز التفعيل منتهي الصلاحية"; return; }
-  if(pass.length < 4){ err.textContent = "اكتب كلمة سر للإدارة من 4 أحرف على الأقل"; return; }
+  if(isTiny) lsSet('ttActN', String(reqNo()));
+  lsSet('ttActBad', "0"); lsSet('ttActLocks', "0"); lsSet('ttActLock', "0");
   lsSet('ttLicense', JSON.stringify({ key, school }));
   lsSet('ttAdminPass', pass);
   document.getElementById('actKey').value = "";
