@@ -238,6 +238,12 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
     <div class="err" id="settingsMsg"></div>
     <h2 style="margin-top:22px">المتقدمون</h2>
     <div id="adminList"></div>
+    <h2 style="margin-top:22px">النسخ الاحتياطي</h2>
+    <div class="summary-box" id="backupInfo"></div>
+    <button class="btn primary" onclick="exportBackup()">💾 حفظ نسخة احتياطية</button>
+    <button class="btn light" onclick="document.getElementById('restoreFile').click()">📂 استعادة نسخة احتياطية</button>
+    <input type="file" id="restoreFile" accept=".json,application/json" style="display:none" onchange="importBackup(this)">
+    <div class="err" id="backupMsg"></div>
     <h2 style="margin-top:22px">الترخيص وكلمة السر</h2>
     <div class="summary-box" id="licenseInfo"></div>
     <button class="btn light" onclick="openActivation()">تفعيل / تجديد الترخيص</button>
@@ -1227,6 +1233,7 @@ function renderAdmin(){
   document.getElementById('licenseInfo').textContent = licenseText(st) + " — رمز الجهاز: " + getDeviceId();
   document.getElementById('passMsg').textContent = getPass() === DEFAULT_PASS ? "⚠️ أنت تستخدم كلمة السر الافتراضية، يُنصح بتغييرها" : "";
   document.getElementById('passMsg').classList.remove('ok');
+  renderBackupInfo();
   const list = document.getElementById('adminList');
   const results = loadResults();
   list.innerHTML = "";
@@ -1254,6 +1261,108 @@ function renderAdmin(){
     table.appendChild(tr);
   }
   list.appendChild(table);
+}
+
+// ===== النسخ الاحتياطي والاستعادة =====
+function resultKey(r){ return [r.name, r.phone, r.date, r.percent].join('|'); }
+
+function renderBackupInfo(){
+  const box = document.getElementById('backupInfo');
+  const n = loadResults().length;
+  const last = +(lsGet('ttLastBackup') || 0);
+  let t = `عدد التقارير المحفوظة على هذا الجهاز: ${n}\n`;
+  if(!last){
+    t += n ? "⚠️ لم تُحفظ أي نسخة احتياطية بعد — احفظ نسخة الآن حتى لا تضيع التقارير" : "لم تُحفظ أي نسخة احتياطية بعد";
+  } else {
+    const days = Math.floor((Date.now() - last) / 86400000);
+    t += `آخر نسخة احتياطية: ${new Date(last).toLocaleString('ar-JO')}`;
+    if(days >= 7 && n) t += `\n⚠️ مضى ${days} أيام على آخر نسخة — يُنصح بحفظ نسخة جديدة`;
+  }
+  box.style.whiteSpace = 'pre-line';
+  box.textContent = t;
+}
+
+function backupMsg(text, ok){
+  const m = document.getElementById('backupMsg');
+  m.textContent = text;
+  m.classList.toggle('ok', !!ok);
+}
+
+async function exportBackup(){
+  const results = loadResults();
+  if(!results.length){ backupMsg("لا توجد تقارير لحفظها بعد"); return; }
+  const lic = licenseState();
+  const data = {
+    app: "TeacherTest",
+    version: 1,
+    created: new Date().toISOString(),
+    school: lic.status === 'active' ? lic.school : "",
+    device: getDeviceId(),
+    results,
+    settings: lsJSON('teacherSettings')
+  };
+  const d = new Date();
+  const stamp = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,'0') + "-" + String(d.getDate()).padStart(2,'0');
+  const fileName = `نسخة-احتياطية-المعلمين-${stamp}.json`;
+  const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+
+  // على الهاتف: نافذة المشاركة (واتساب، Drive، البريد...)
+  try {
+    const file = new File([blob], fileName, { type: "application/json" });
+    if(navigator.canShare && navigator.canShare({ files: [file] })){
+      await navigator.share({ files: [file], title: "نسخة احتياطية — اختبار كفاءة المعلمين" });
+      lsSet('ttLastBackup', String(Date.now()));
+      renderBackupInfo();
+      backupMsg(`✅ تم حفظ نسخة فيها ${results.length} تقريرًا`, true);
+      return;
+    }
+  } catch(e){
+    if(e && e.name === 'AbortError'){ backupMsg("تم إلغاء الحفظ"); return; }
+  }
+
+  // على الكمبيوتر: تنزيل الملف
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = fileName;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  lsSet('ttLastBackup', String(Date.now()));
+  renderBackupInfo();
+  backupMsg(`✅ تم تنزيل نسخة فيها ${results.length} تقريرًا — احتفظ بها في مكان آمن`, true);
+}
+
+function importBackup(input){
+  const f = input.files && input.files[0];
+  input.value = "";
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    let data;
+    try { data = JSON.parse(reader.result); } catch(e){ data = null; }
+    if(!data || data.app !== "TeacherTest" || !Array.isArray(data.results)){
+      backupMsg("❌ هذا الملف ليس نسخة احتياطية صحيحة من التطبيق");
+      return;
+    }
+    const current = loadResults();
+    const seen = new Set(current.map(resultKey));
+    let added = 0;
+    data.results.forEach(r => {
+      if(r && r.name && r.scores && !seen.has(resultKey(r))){
+        current.push(r); seen.add(resultKey(r)); added++;
+      }
+    });
+    try { localStorage.setItem('teacherResults', JSON.stringify(current)); }
+    catch(e){ backupMsg("❌ تعذّر الحفظ على هذا الجهاز"); return; }
+    if(data.settings && !lsGet('teacherSettings')){
+      try { localStorage.setItem('teacherSettings', JSON.stringify(data.settings)); } catch(e){}
+    }
+    renderAdmin();
+    backupMsg(added
+      ? `✅ تمت استعادة ${added} تقريرًا جديدًا (المجموع الآن ${current.length})`
+      : "ℹ️ كل التقارير في هذه النسخة موجودة أصلًا على الجهاز", true);
+  };
+  reader.onerror = () => backupMsg("❌ تعذّرت قراءة الملف");
+  reader.readAsText(f);
 }
 
 let currentReport = null;
