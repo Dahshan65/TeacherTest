@@ -32,6 +32,10 @@ jobs:
           # copy the website files (index.html and the rest) into the app
           rsync -a --exclude .git --exclude .github ./ $P/app/src/main/assets/
 
+          # app icon from the repo's icon.png
+          mkdir -p $P/app/src/main/res/mipmap
+          cp icon.png $P/app/src/main/res/mipmap/ic_launcher.png
+
           cat > $P/settings.gradle <<'EOF'
           pluginManagement {
               repositories { google(); mavenCentral(); gradlePluginPortal() }
@@ -77,6 +81,8 @@ jobs:
               <uses-permission android:name="android.permission.INTERNET" />
               <application
                   android:label="اختبار كفاءة المعلمين"
+                  android:icon="@mipmap/ic_launcher"
+                  android:roundIcon="@mipmap/ic_launcher"
                   android:supportsRtl="true"
                   android:theme="@android:style/Theme.Material.Light.NoActionBar">
                   <activity
