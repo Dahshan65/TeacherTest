@@ -1,5 +1,5 @@
 // عامل الخدمة — يجعل التطبيق يعمل بدون إنترنت بعد أول فتح
-const CACHE = 'teachertest-v3';
+const CACHE = 'teachertest-v4';
 const CORE = ['./', './index.html', './manifest.json', './icon.png', './icon-192.png'];
 
 self.addEventListener('install', e => {
