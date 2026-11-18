@@ -226,7 +226,7 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
     </div>
     <button class="btn light" id="actBtn" onclick="openActivation()">🔑 تفعيل التطبيق للمدارس</button>
     <button class="btn install-btn hidden" id="installBtn" onclick="installApp()">📲 تثبيت التطبيق على الجهاز</button>
-    <button class="small-link" onclick="show('loginScreen')">دخول الإدارة</button>
+    <button class="small-link" onclick="openLogin()">دخول الإدارة</button>
     <a class="promo" href="https://dahshansoft.com" target="_blank">
       <span class="ds-logo">DS</span>
       <span><b>Dahshan Soft</b><small>تطبيقات تعليمية واحترافية للمدارس والأفراد — زوروا dahshansoft.com</small></span>
@@ -368,6 +368,11 @@ summary{font-weight:bold;cursor:pointer;color:#0b2e59;font-size:17px}
   <!-- دخول الإدارة -->
   <div id="loginScreen" class="card hidden">
     <h2>دخول الإدارة</h2>
+    <div id="defPassHint" style="display:none;background:#fff4e0;border:2px solid #e08a00;border-radius:14px;padding:14px 16px;margin:6px 0 14px;text-align:center;line-height:1.8">
+      <div style="font-size:16px">كلمة سر الإدارة الافتراضية</div>
+      <div style="font-size:38px;font-weight:bold;letter-spacing:8px;color:#0b2e59;font-family:Arial,sans-serif" dir="ltr">1234</div>
+      <div style="font-size:15px">يمكنك تغييرها بعد الدخول من <b>⚙️ الإعدادات ← تغيير كلمة سر الإدارة</b></div>
+    </div>
     <label>كلمة السر</label>
     <input id="pass" type="password">
     <div class="err" id="loginErr"></div>
@@ -2043,6 +2048,11 @@ function finishTest(){
   show('endScreen');
 }
 
+function openLogin(){
+  const h = document.getElementById('defPassHint');
+  if(h) h.style.display = getPass() === DEFAULT_PASS ? 'block' : 'none';
+  show('loginScreen');
+}
 function login(){
   const p = document.getElementById('pass').value;
   const err = document.getElementById('loginErr');
